@@ -1,14 +1,30 @@
 import { Link } from "react-router-dom";
 import { FaRegEnvelope } from "react-icons/fa6";
-import { Button, Form, Input } from "antd";
-import backgroundImg from "/src/assets/header_96c74815-3497-4ccf-bf3c-3dfdfa17e313.webp";
+import { Button, Form, Input, message } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { emailSchema } from "../../schemas/userSchema";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+
+import { emailSchema } from "../../schemas/userSchema";
+import { findUserByEmail } from "../../apis/user.api";
+import backgroundImg from "/src/assets/header_96c74815-3497-4ccf-bf3c-3dfdfa17e313.webp";
 
 const MainSignUp = () => {
   const [form] = useForm();
   const [isEmailValid, setIsEmailValid] = useState(false);
+
+  const { mutate } = useMutation({
+    mutationFn: findUserByEmail,
+    onSuccess: () => message.success("Success"),
+    onError: (error: AxiosError) => {
+      if (error.response && error.response.status === 404) {
+        message.error("Email is not found");
+      } else {
+        message.error("Failed to find user");
+      }
+    },
+  });
 
   return (
     <div className="bg-gray-100 max-md:bg-white w-3/5 min-h-full shadow-lg mx-auto rounded-lg flex flex-row gap-4 max-md:w-full">
@@ -20,7 +36,7 @@ const MainSignUp = () => {
         <Form
           form={form}
           layout="vertical"
-          // onFinish={onSubmit}
+          onFinish={(data) => mutate(data.email)}
           onValuesChange={(_, allValues) => {
             const { email } = allValues;
             if (email) {
