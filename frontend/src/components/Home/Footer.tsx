@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <>
-      <div className="mx-16 py-12 md:grid md:grid-cols-4 flex flex-col max-md:mx-6 border-b border-gray-300">
+      <div className="mx-16 max-md:text-sm py-12 md:grid md:grid-cols-4 flex flex-col max-md:mx-6 border-b border-gray-300">
         <div className="w-1/2 h-full max-md:w-1/3 flex flex-col max-md:gap-8 mb-12">
           <img
             src="/src/assets/z6005140779869_f6c7fcbf20895c41056a882bae49e05d.jpg"
@@ -46,7 +46,7 @@ const Footer = () => {
           <p>Careers</p>
           <p>About Us</p>
         </div>
-        <div className="flex flex-col gap-4 w-2/3 max-md:mt-12">
+        <div className="flex flex-col gap-4 max-md:w-1/3 w-2/3 max-md:mt-12">
           <img
             src="/src/assets/62fa641a161d3a2982681d00_Google Play.svg"
             alt="Google play"
