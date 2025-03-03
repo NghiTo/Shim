@@ -5,7 +5,7 @@
   "main": "./src/app.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon app.js",
+    "dev": "nodemon app.js",
     "migrate": "npx dotenv -e ./environments/.env npx prisma migrate dev"
   },
   "prisma": {
