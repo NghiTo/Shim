@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import Loading from "./components/Loading/Loading";
-import { Suspense } from "react";
-import Home from "./pages/Home";
+import { lazy, Suspense } from "react";
+import Loading from "./components/shared/Loading";
+
+const Home = lazy(() => import("./pages/Home"));
 
 const router = createBrowserRouter([
   {
