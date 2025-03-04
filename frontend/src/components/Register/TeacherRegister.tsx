@@ -150,6 +150,7 @@ const TeacherRegister = () => {
           />
         </Form.Item>
         <Button
+          danger
           loading={isPending}
           htmlType="submit"
           type="primary"
