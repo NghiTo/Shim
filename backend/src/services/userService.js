@@ -8,7 +8,7 @@ import { AppError } from "../utils/errorHandler.js";
 
 const prisma = new PrismaClient();
 
-const findUserByEmail = async ({ email }) => {
+const findUserByEmail = async ( email ) => {
   const user = await prisma.user.findFirst({ where: { email } });
   if (!user) {
     throw new AppError({

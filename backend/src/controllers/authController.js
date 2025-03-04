@@ -11,4 +11,11 @@ const register = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.AUTH.REGISTER_SUCCESS, data: user });
 });
 
-export default { register };
+const login = catchAsync(async (req, res) => {
+  const user = await authService.login(req.body);
+  return res
+    .status(StatusCodes.ACCEPTED)
+    .json({ message: MESSAGES.AUTH.LOGIN_SUCCESS, data: user });
+});
+
+export default { register, login };
