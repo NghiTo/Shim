@@ -3,6 +3,7 @@ import { UserState } from "../types/user.type";
 
 const initialState: UserState = {
   email: "",
+  role: "",
 };
 
 const userSlice = createSlice({
@@ -11,9 +12,11 @@ const userSlice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<UserState>) {
       state.email = action.payload.email;
+      state.role = action.payload.role;
     },
     clearUser(state) {
       state.email = "";
+      state.role = "";
     },
   },
 });

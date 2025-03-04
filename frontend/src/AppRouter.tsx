@@ -6,6 +6,7 @@ import ErrorFallback from "./components/shared/ErrorFallBack";
 import NotFound from "./components/shared/NotFound";
 import Register from "./pages/Register";
 import MainSignUp from "./components/Register/MainSignUp";
+import Occupation from "./components/Register/Occupation";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <MainSignUp />,
+      },
+      {
+        path: "/signup/occupation",
+        element: <Occupation />,
       },
     ],
   },

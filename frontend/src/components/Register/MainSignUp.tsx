@@ -1,27 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { Button, Form, Input, message } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useDispatch } from "react-redux";
 
-import { emailSchema } from "../../schemas/userSchema";
 import { findUserByEmail } from "../../apis/user.api";
+import { emailSchema } from "../../schemas/userSchema";
 import backgroundImg from "/src/assets/header_96c74815-3497-4ccf-bf3c-3dfdfa17e313.webp";
+import { setUser } from "../../store/userReducer";
 
 const MainSignUp = () => {
   const [form] = useForm();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isEmailValid, setIsEmailValid] = useState(false);
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: findUserByEmail,
-    onSuccess: () => message.success("Success"),
+    onSuccess: () =>
+      message.error("An account has already been associated with this email"),
     onError: (error: AxiosError) => {
       if (error.response && error.response.status === 404) {
-        message.error("Email is not found");
+        dispatch(setUser({ email: form.getFieldValue("email") }));
+        navigate("/signup/occupation");
       } else {
-        message.error("Failed to find user");
+        message.error("Failed to register");
       }
     },
   });
@@ -64,7 +70,7 @@ const MainSignUp = () => {
           <Button
             htmlType="submit"
             type="primary"
-            // loading={isLoading}
+            loading={isPending}
             disabled={!isEmailValid}
             className={`w-full py-4 rounded-md`}
           >
