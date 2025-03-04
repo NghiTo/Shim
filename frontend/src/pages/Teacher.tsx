@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import NavBar from "../components/Teacher/NavBar";
 // import NavBar from "../../components/Teacher/NavBar";
 // import SideBar from "../../components/Teacher/SideBar/SideBar";
 // import { useEffect, useState } from "react";
@@ -21,7 +22,9 @@ const Teacher = () => {
       {/* <CreatePassword /> */}
       {/* <SideBar selectedKeys={selectedKeys} setSelectedKeys={setSelectedKeys} /> */}
       <div className="flex flex-col w-full border-l border-gray-400">
-        {/* <NavBar selectedKeys={selectedKeys} setSelectedKeys={setSelectedKeys} /> */}
+        <NavBar
+        //  selectedKeys={selectedKeys} setSelectedKeys={setSelectedKeys}
+        />
         <Outlet />
       </div>
     </div>

@@ -1,4 +1,13 @@
 import { MenuProps } from "antd";
+import { RiBook2Line } from "react-icons/ri";
+import { IoPieChartOutline } from "react-icons/io5";
+import { SiGoogleclassroom } from "react-icons/si";
+import {
+  FaHandHoldingHeart,
+  FaHouse,
+  FaQuestion,
+  FaSchool,
+} from "react-icons/fa6";
 
 export const titleOptions = [
   { value: "Mr", label: "Mr" },
@@ -84,4 +93,31 @@ export const itemsPoint: MenuProps["items"] = [
   { label: "18 points", key: "18" },
   { label: "19 points", key: "19" },
   { label: "20 points", key: "20" },
+];
+
+type MenuItem = {
+  key: string;
+  icon?: React.ReactNode;
+  label: string;
+  children?: MenuItem[];
+};
+
+export const sideBarItems: MenuItem[] = [
+  { key: "1", icon: <FaHouse />, label: "Explore" },
+  { key: "2", icon: <RiBook2Line />, label: "Library" },
+  { key: "3", icon: <IoPieChartOutline />, label: "Report" },
+  { key: "4", icon: <SiGoogleclassroom />, label: "Classes" },
+  { key: "5", icon: <FaHandHoldingHeart />, label: "Accommodations" },
+  { key: "6", icon: <FaSchool />, label: "Teachers" },
+  {
+    key: "sub1",
+    label: "Help and Resources",
+    icon: <FaQuestion />,
+    children: [
+      { key: "7", label: "Teacher Resources" },
+      { key: "8", label: "Teacher wish list" },
+      { key: "9", label: "Contact Support" },
+      { key: "10", label: "Help Center" },
+    ],
+  },
 ];
