@@ -4,6 +4,13 @@ import { useState } from "react";
 import { FaArrowLeft, FaRegEnvelope } from "react-icons/fa6";
 import { GoLock } from "react-icons/go";
 import { emailSchema, passwordSchema } from "../../schemas/userSchema";
+import { LoginForm } from "../../types/user.type";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../apis/auth.api";
+import { useNavigate } from "react-router-dom";
+import { onError } from "../../constants/onError";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/userReducer";
 
 interface LoginFormProps {
   setContinueEmail: (value: boolean) => void;
@@ -11,7 +18,18 @@ interface LoginFormProps {
 
 const ContinueEmail: React.FC<LoginFormProps> = ({ setContinueEmail }) => {
   const [form] = useForm();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isValidForm, setIsValidForm] = useState(false);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: login,
+    onSuccess: (res) => {
+      dispatch(setUser({ ...res.data, isAuthUser: true }));
+      navigate(`/${res.data.role}`);
+    },
+    onError: onError,
+  });
 
   return (
     <div className="w-3/5 max-md:w-full py-4 px-8 flex flex-col gap-4 min-h-full">
@@ -26,7 +44,7 @@ const ContinueEmail: React.FC<LoginFormProps> = ({ setContinueEmail }) => {
       <Form
         form={form}
         layout="vertical"
-        // onFinish={onSubmit}
+        onFinish={(data: LoginForm) => mutate(data)}
         className="flex flex-col pb-4"
         onValuesChange={(_, allValues) => {
           const { email, password } = allValues;
@@ -63,8 +81,9 @@ const ContinueEmail: React.FC<LoginFormProps> = ({ setContinueEmail }) => {
         </Form.Item>
         <Button
           danger
+          type="primary"
           disabled={!isValidForm}
-          // loading={isLoading}
+          loading={isPending}
           htmlType="submit"
         >
           Continue

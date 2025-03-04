@@ -14,3 +14,8 @@ export type RegisterForm = {
   subject: string;
   grade: string;
 };
+
+export type LoginForm = {
+  email: string;
+  password: string;
+};
