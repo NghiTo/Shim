@@ -1,1 +1,6 @@
 @import "tailwindcss" important;
+
+.ant-menu-item-selected {
+  color: #fe5f5c !important;
+  background: none !important;
+}

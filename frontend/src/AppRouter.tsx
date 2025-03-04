@@ -13,6 +13,7 @@ import RejectedRoute from "./components/shared/RejectedRoute";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import UserInfo from "./components/Teacher/Profile/UserInfo";
 
 const Home = lazy(() => import("./pages/Home"));
 const Teacher = lazy(() => import("./pages/Teacher"));
@@ -89,6 +90,12 @@ const router = createBrowserRouter([
       </Suspense>
     ),
     errorElement: <ErrorFallback />,
+    children: [
+      {
+        path: "/teacher/profile/:id",
+        element: <UserInfo />,
+      },
+    ],
   },
   {
     path: "*",

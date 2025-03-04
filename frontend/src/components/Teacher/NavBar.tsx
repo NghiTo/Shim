@@ -6,15 +6,17 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { LuSettings } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
 import { IoMdMenu } from "react-icons/io";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import defaultImg from "/src/assets/default-ava.png";
 import { sideBarItems } from "../../constants/constants";
 import { clearUser } from "../../store/userReducer";
 import { useState } from "react";
+import { RootState } from "../../store/store";
 
 const NavBar = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   const [popoverVisible, setPopoverVisible] = useState(false);
 
   const handleLogout = () => {
@@ -65,7 +67,7 @@ const NavBar = () => {
         content={
           <div className="flex flex-col gap-2">
             <Link
-              to={`/teacher/profile`}
+              to={`/teacher/profile/${user.id}`}
               className="flex flex-row items-center text-gray-800 gap-2 hover:text-[#fe5f5c]"
             >
               <FaRegUserCircle />
@@ -90,13 +92,9 @@ const NavBar = () => {
         }
       >
         <img
-          src={
-            // (user.avatarUrl as string) ||
-            defaultImg
-          }
+          src={defaultImg}
           alt="avatar"
           className="w-auto h-11 border-2 aspect-square object-cover border-gray-100 hover:border-gray-400 transition-all duration-100 ease-in-out cursor-pointer rounded-full "
-          // onClick={() => setPopoverVisible(!popoverVisible)}
         />
       </Popover>
     </div>

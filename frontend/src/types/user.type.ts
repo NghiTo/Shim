@@ -1,4 +1,5 @@
 export type UserState = {
+  id: string;
   email: string;
   role: string;
   isAuthUser: boolean;
