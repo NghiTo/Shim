@@ -11,6 +11,7 @@ import TeacherRegister from "./components/Register/TeacherRegister";
 import ProtectedRoute from "./components/shared/ProtectedRoute";
 import RejectedRoute from "./components/shared/RejectedRoute";
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const Home = lazy(() => import("./pages/Home"));
 const Teacher = lazy(() => import("./pages/Teacher"));
@@ -55,6 +56,15 @@ const router = createBrowserRouter([
     element: (
       <RejectedRoute>
         <Login />
+      </RejectedRoute>
+    ),
+    errorElement: <ErrorFallback />,
+  },
+  {
+    path: "/forgot-password",
+    element: (
+      <RejectedRoute>
+        <ForgotPassword />
       </RejectedRoute>
     ),
     errorElement: <ErrorFallback />,
