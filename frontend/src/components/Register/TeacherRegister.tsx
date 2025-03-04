@@ -1,8 +1,8 @@
 import { Button, Form, Input, Select } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
 
 import {
   gradeOptions,
@@ -18,11 +18,39 @@ import {
   subjectSchema,
   titleSchema,
 } from "../../schemas/userSchema";
+import { RootState } from "../../store/store";
+import { register } from "../../apis/auth.api";
+import { RegisterForm } from "../../types/user.type";
+import { onError } from "../../constants/onError";
+import { setUser } from "../../store/userReducer";
 
 const TeacherRegister = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: register,
+    onSuccess: () => {
+      dispatch(setUser({ ...user, isAuthUser: true }));
+      navigate("/teacher");
+    },
+    onError: onError,
+  });
+
+  const onSubmit = (data: RegisterForm) => {
+    mutate({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: data.password,
+      title: data.title,
+      grade: data.grade,
+      subject: data.subject,
+      role: user.role,
+      email: user.email,
+    });
+  };
 
   useEffect(() => {
     if (!user.email || user.role !== "teacher") {
@@ -38,11 +66,7 @@ const TeacherRegister = () => {
         </h1>
         <p>Signing up as teacher</p>
       </div>
-      <Form
-        form={form}
-        // onFinish={onSubmit}
-        layout="vertical"
-      >
+      <Form form={form} onFinish={onSubmit} layout="vertical">
         <div className="flex flex-row w-full gap-4">
           <Form.Item<{ title: string }>
             label="Title"
@@ -125,7 +149,12 @@ const TeacherRegister = () => {
             placeholder="Confirm your password"
           />
         </Form.Item>
-        <Button htmlType="submit" type="primary" className="flex ml-auto">
+        <Button
+          loading={isPending}
+          htmlType="submit"
+          type="primary"
+          className="flex ml-auto"
+        >
           Continue
         </Button>
       </Form>
