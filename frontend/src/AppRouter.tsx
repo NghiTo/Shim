@@ -7,6 +7,7 @@ import NotFound from "./components/shared/NotFound";
 import Register from "./pages/Register";
 import MainSignUp from "./components/Register/MainSignUp";
 import Occupation from "./components/Register/Occupation";
+import TeacherRegister from "./components/Register/TeacherRegister";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/signup/occupation",
         element: <Occupation />,
+      },
+      {
+        path: "/signup/teacher",
+        element: <TeacherRegister />,
       },
     ],
   },

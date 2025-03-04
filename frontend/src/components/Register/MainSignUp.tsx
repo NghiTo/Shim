@@ -5,17 +5,19 @@ import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { findUserByEmail } from "../../apis/user.api";
 import { emailSchema } from "../../schemas/userSchema";
 import backgroundImg from "/src/assets/header_96c74815-3497-4ccf-bf3c-3dfdfa17e313.webp";
 import { setUser } from "../../store/userReducer";
+import { RootState } from "../../store/store";
 
 const MainSignUp = () => {
   const [form] = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   const [isEmailValid, setIsEmailValid] = useState(false);
 
   const { mutate, isPending } = useMutation({
@@ -24,7 +26,7 @@ const MainSignUp = () => {
       message.error("An account has already been associated with this email"),
     onError: (error: AxiosError) => {
       if (error.response && error.response.status === 404) {
-        dispatch(setUser({ email: form.getFieldValue("email") }));
+        dispatch(setUser({ ...user, email: form.getFieldValue("email") }));
         navigate("/signup/occupation");
       } else {
         message.error("Failed to register");
@@ -52,7 +54,7 @@ const MainSignUp = () => {
             }
           }}
         >
-          <Form.Item
+          <Form.Item<{ email: string }>
             label="Email"
             name={"email"}
             className=""
