@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import pkg from "lodash";
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
 
 import { AppError } from "../utils/errorHandler.js";
 import MESSAGES from "../constants/messages.js";
@@ -10,11 +11,11 @@ import ERROR_CODES from "../constants/errorCode.js";
 import userService from "./userService.js";
 import { generateAccessToken } from "../utils/generateTokens.js";
 
+const SALT_ROUNDS = 10;
 const { omit } = pkg;
 const prisma = new PrismaClient();
 
 const register = async (data) => {
-  const SALT_ROUNDS = 10;
   const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS);
   const newData = { ...data, password: hashedPassword };
   const user = await prisma.user.create({ data: newData });
@@ -97,4 +98,13 @@ const forgotPassword = async (email) => {
   return;
 };
 
-export default { register, login, forgotPassword };
+const resetPassword = async (token, password) => {
+  const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+  const user = await userService.updateUser(decoded.userId, {
+    password: hashedPassword,
+  });
+  return omit(user, ["password"]);
+};
+
+export default { register, login, forgotPassword, resetPassword };

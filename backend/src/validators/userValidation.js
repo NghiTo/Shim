@@ -58,6 +58,12 @@ const emailSchema = celebrate({
   }),
 });
 
+const passwordSchema = celebrate({
+  [Segments.BODY]: Joi.object({
+    password: passwordField,
+  }),
+});
+
 const registerSchema = celebrate({
   [Segments.BODY]: Joi.object({
     email: emailField,
@@ -80,4 +86,5 @@ export default {
   emailSchema,
   registerSchema,
   loginSchema,
+  passwordSchema,
 };

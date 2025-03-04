@@ -16,5 +16,10 @@ router.post(
   userValidation.emailSchema,
   authController.forgotPassword
 );
+router.post(
+  "/reset-password/:token",
+  userValidation.passwordSchema,
+  authController.resetPassword
+);
 
 export default router;
