@@ -1,8 +1,18 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 
 import { emailSchema } from "../schemas/userSchema";
+import { useMutation } from "@tanstack/react-query";
+import { forgotPassword } from "../apis/auth.api";
+import { onError } from "../constants/onError";
 
 const ForgotPassword = () => {
+  const { mutate, isPending } = useMutation({
+    mutationFn: forgotPassword,
+    onSuccess: () => {
+      message.info("An email has been sent to your account");
+    },
+    onError: onError,
+  });
   return (
     <div className="min-h-screen flex relative">
       <img
@@ -11,6 +21,7 @@ const ForgotPassword = () => {
         className="absolute w-1/12 top-4 left-4 max-md:w-1/5"
       />
       <Form
+        onFinish={(data) => mutate(data.email)}
         layout="vertical"
         className="bg-gray-100 m-auto p-8 max-md:w-full w-2/5 rounded-lg flex flex-col gap-4 shadow-lg"
       >
@@ -37,6 +48,7 @@ const ForgotPassword = () => {
           </Button>
           <Button
             type="primary"
+            loading={isPending}
             htmlType="submit"
             className={` w-1/2 px-auto text-center p-4`}
           >

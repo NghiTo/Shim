@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/shared/ProtectedRoute";
 import RejectedRoute from "./components/shared/RejectedRoute";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const Home = lazy(() => import("./pages/Home"));
 const Teacher = lazy(() => import("./pages/Teacher"));
@@ -65,6 +66,15 @@ const router = createBrowserRouter([
     element: (
       <RejectedRoute>
         <ForgotPassword />
+      </RejectedRoute>
+    ),
+    errorElement: <ErrorFallback />,
+  },
+  {
+    path: "/reset-password/:token",
+    element: (
+      <RejectedRoute>
+        <ResetPassword />
       </RejectedRoute>
     ),
     errorElement: <ErrorFallback />,
