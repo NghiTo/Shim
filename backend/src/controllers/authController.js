@@ -18,4 +18,9 @@ const login = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.AUTH.LOGIN_SUCCESS, data: user });
 });
 
-export default { register, login };
+const forgotPassword = catchAsync(async (req, res) => {
+  await authService.forgotPassword(req.body.email);
+  return res.status(StatusCodes.OK).json({ message: MESSAGES.AUTH.EMAIL_SENT });
+});
+
+export default { register, login, forgotPassword };
