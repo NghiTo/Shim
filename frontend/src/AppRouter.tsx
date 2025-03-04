@@ -8,22 +8,31 @@ import Register from "./pages/Register";
 import MainSignUp from "./components/Register/MainSignUp";
 import Occupation from "./components/Register/Occupation";
 import TeacherRegister from "./components/Register/TeacherRegister";
+import ProtectedRoute from "./components/shared/ProtectedRoute";
+import RejectedRoute from "./components/shared/RejectedRoute";
 
 const Home = lazy(() => import("./pages/Home"));
+const Teacher = lazy(() => import("./pages/Teacher"));
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <Suspense fallback={<Loading />}>
-        <Home />
+        <RejectedRoute>
+          <Home />
+        </RejectedRoute>
       </Suspense>
     ),
     errorElement: <ErrorFallback />,
   },
   {
     path: "/signup",
-    element: <Register />,
+    element: (
+      <RejectedRoute>
+        <Register />
+      </RejectedRoute>
+    ),
     errorElement: <ErrorFallback />,
     children: [
       {
@@ -39,6 +48,17 @@ const router = createBrowserRouter([
         element: <TeacherRegister />,
       },
     ],
+  },
+  {
+    path: "/teacher",
+    element: (
+      <Suspense fallback={<Loading />}>
+        <ProtectedRoute>
+          <Teacher />
+        </ProtectedRoute>
+      </Suspense>
+    ),
+    errorElement: <ErrorFallback />,
   },
   {
     path: "*",
