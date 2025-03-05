@@ -20,6 +20,18 @@ const findUserByEmail = async (email) => {
   return omit(user, ["password"]);
 };
 
+const getUserById = async (id) => {
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) {
+    throw new AppError({
+      message: MESSAGES.USER.NOT_FOUND,
+      errorCode: ERROR_CODES.USER.NOT_FOUND,
+      statusCode: StatusCodes.NOT_FOUND,
+    });
+  }
+  return omit(user, ["password"]);
+};
+
 const updateUser = async (id, data) => {
   const user = await prisma.user.findUnique({
     where: { id },
@@ -40,5 +52,6 @@ const updateUser = async (id, data) => {
 
 export default {
   findUserByEmail,
+  getUserById,
   updateUser,
 };

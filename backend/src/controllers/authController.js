@@ -3,9 +3,22 @@ import { StatusCodes } from "http-status-codes";
 import authService from "../services/authService.js";
 import catchAsync from "../utils/catchAsync.js";
 import MESSAGES from "../constants/messages.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
 
 const register = catchAsync(async (req, res) => {
   const user = await authService.register(req.body);
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 15 * 6000 * 1000,
+  });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000,
+  });
   return res
     .status(StatusCodes.CREATED)
     .json({ message: MESSAGES.AUTH.REGISTER_SUCCESS, data: user });
@@ -13,6 +26,18 @@ const register = catchAsync(async (req, res) => {
 
 const login = catchAsync(async (req, res) => {
   const user = await authService.login(req.body);
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 15 * 6000 * 1000,
+  });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000,
+  });
   return res
     .status(StatusCodes.ACCEPTED)
     .json({ message: MESSAGES.AUTH.LOGIN_SUCCESS, data: user });
@@ -33,4 +58,29 @@ const resetPassword = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.AUTH.PASSWORD_RESET_SUCCESS, data: user });
 });
 
-export default { register, login, forgotPassword, resetPassword };
+const createGoogleUser = catchAsync(async (req, res) => {
+  const user = await authService.createGoogleUser(req.body);
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 15 * 6000 * 1000,
+  });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.USER.FIND_SUCCESS, data: user });
+});
+
+export default {
+  register,
+  login,
+  forgotPassword,
+  resetPassword,
+  createGoogleUser,
+};

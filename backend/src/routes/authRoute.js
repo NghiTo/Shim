@@ -21,5 +21,6 @@ router.post(
   userValidation.passwordSchema,
   authController.resetPassword
 );
+router.post("/google", authController.createGoogleUser);
 
 export default router;

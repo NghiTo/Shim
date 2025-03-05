@@ -2,6 +2,7 @@ const MESSAGES = {
   USER: {
     FIND_SUCCESS: "User found successfully.",
     NOT_FOUND: "User not found",
+    UPDATE_SUCCESS: "User updated successfully",
   },
   AUTH: {
     REGISTER_SUCCESS: "Register successfully.",

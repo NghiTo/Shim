@@ -9,9 +9,10 @@ import routes from "../routes/mainRoute.js";
 import { AppError, globalErrorHandler } from "./errorHandler.js";
 import ERROR_CODES from "../constants/errorCode.js";
 import { googleOauth } from "../config/googleConfig.js";
+import { generateAccessToken, generateRefreshToken } from "./generateTokens.js";
 
 export default function setupMiddlewares(app) {
-  app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+  app.use(cors({ origin: process.env.FRONT_END_URL, credentials: true }));
   app.use(json({ limit: "600mb" }));
   app.use(urlencoded({ extended: true, limit: "600mb" }));
   app.use(cookieParser());
@@ -42,11 +43,23 @@ export default function setupMiddlewares(app) {
     (req, res) => {
       if (!req.user.role) {
         res.redirect(
-          `http://localhost:5173/signup/occupation?userId=${req.user.id}&firstName=${req.user.name.familyName}&lastName=${req.user.name.givenName}&email=${req.user.emails[0].value}&avatarUrl=${req.user.photos[0].value}`
+          `${process.env.FRONT_END_URL}/signup/occupation?token=${req.user.token}`
         );
       } else {
+        const accessToken = generateAccessToken(req.user);
+        const refreshToken = generateRefreshToken(req.user);
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 15 * 6000 * 1000,
+        });
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 24 * 60 * 60 * 1000,
+        });
         res.redirect(
-          `http://localhost:5173/login?userId=${req.user.id}&avatarUrl=${req.user.avatarUrl}&role=${req.user.role}`
+          `${process.env.FRONT_END_URL}/login?id=${req.user.id}&role=${req.user.role}&avatarUrl=${req.user.avatarUrl}`
         );
       }
     }

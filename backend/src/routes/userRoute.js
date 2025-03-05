@@ -10,4 +10,6 @@ router.post(
   userController.findUserByEmail
 );
 
+router.put("/:id", userController.updateUser);
+
 export default router;

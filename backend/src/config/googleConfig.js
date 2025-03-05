@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import dotenv from "dotenv";
 import path from "path";
+import jwt from "jsonwebtoken";
 
 dotenv.config({ path: path.resolve("environments/.env") });
 
@@ -19,9 +20,19 @@ export const googleOauth = new GoogleStrategy(
         where: { email: profile.emails[0].value },
       });
       if (!user) {
-        user = profile;
+        user = {
+          email: profile.emails[0].value,
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+          avatarUrl: profile.photos[0].value,
+        };
+        const token = jwt.sign({ ...user }, process.env.ACCESS_TOKEN_SECRET, {
+          expiresIn: "15m",
+        });
+        return done(null, { user, token });
+      } else {
+        return done(null, user);
       }
-      return done(null, user);
     } catch (error) {
       return done(error, null);
     }

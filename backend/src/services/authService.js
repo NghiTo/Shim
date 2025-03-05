@@ -107,4 +107,25 @@ const resetPassword = async (token, password) => {
   return omit(user, ["password"]);
 };
 
-export default { register, login, forgotPassword, resetPassword };
+const createGoogleUser = async (data) => {
+  const decoded = jwt.verify(data.token, process.env.ACCESS_TOKEN_SECRET);
+  const user = await prisma.user.create({
+    data: {
+      email: decoded.email,
+      googleId: decoded.googleId,
+      firstName: decoded.firstName,
+      lastName: decoded.lastName,
+      avatarUrl: decoded.avatarUrl,
+      role: data.role,
+    },
+  });
+  return user;
+};
+
+export default {
+  register,
+  login,
+  forgotPassword,
+  resetPassword,
+  createGoogleUser,
+};

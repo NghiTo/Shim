@@ -9,6 +9,14 @@ const findUserByEmail = catchAsync(async (req, res) => {
   res.status(StatusCodes.OK).json({ message: MESSAGES.USER.FIND_SUCCESS });
 });
 
+const updateUser = async (req, res) => {
+  const updatedUser = await userService.updateUser(req.params.id, req.body);
+  res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.USER.UPDATE_SUCCESS, data: updatedUser });
+};
+
 export default {
   findUserByEmail,
+  updateUser
 };
