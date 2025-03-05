@@ -6,6 +6,11 @@ export const findUserByEmail = async (email: string) => {
   return res.data;
 };
 
+export const getUserById = async (id: string) => {
+  const res = await axiosInstance.get(`/users/${id}`);
+  return res.data;
+};
+
 export const updateUser = async (id: string, data: UpdateForm) => {
   const res = await axiosInstance.put(`/users/${id}`, data);
   return res.data;

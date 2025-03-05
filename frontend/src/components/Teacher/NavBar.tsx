@@ -68,6 +68,7 @@ const NavBar = () => {
           <div className="flex flex-col gap-2">
             <Link
               to={`/teacher/profile/${user.id}`}
+              onClick={() => setPopoverVisible(false)}
               className="flex flex-row items-center text-gray-800 gap-2 hover:text-[#fe5f5c]"
             >
               <FaRegUserCircle />
@@ -92,7 +93,7 @@ const NavBar = () => {
         }
       >
         <img
-          src={defaultImg}
+          src={user?.avatarUrl || defaultImg}
           alt="avatar"
           className="w-auto h-11 border-2 aspect-square object-cover border-gray-100 hover:border-gray-400 transition-all duration-100 ease-in-out cursor-pointer rounded-full "
         />

@@ -121,3 +121,16 @@ export const sideBarItems: MenuItem[] = [
     ],
   },
 ];
+
+export const routeMap: { [key: string]: string } = {
+  "1": "/teacher",
+  "2": "/teacher/library",
+  "3": "/teacher/report",
+  "4": "/teacher/classes",
+  "5": "/teacher/accommodations",
+  "6": "/teacher/teachers",
+  "7": "/teacher/resources",
+  "8": "/teacher/wishlist",
+  "9": "/teacher/contact-support",
+  "10": "/teacher/help-center",
+};
