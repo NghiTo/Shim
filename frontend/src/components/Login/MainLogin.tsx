@@ -1,16 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/userReducer";
 
 interface MainLoginProps {
   setContinueEmail: (value: boolean) => void;
 }
 
 const MainLogin: React.FC<MainLoginProps> = ({ setContinueEmail }) => {
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (searchParams.get("role")) {
+      dispatch(
+        setUser({
+          email: "",
+          id: searchParams.get("id") as string,
+          avatarUrl: searchParams.get("avatarUrl") as string,
+          role: searchParams.get("role") as string,
+          isAuthUser: true,
+        })
+      );
+    }
+  }, [dispatch, searchParams]);
+
   return (
     <div className="w-3/5 max-md:w-full py-4 px-8">
       <h1 className="font-medium text-2xl">Log in to Shim</h1>
-      <div className="flex flex-row cursor-pointer items-center gap-6 mt-4 border border-gray-300 p-2 rounded-lg hover:shadow-lg">
+      <div
+        onClick={() =>
+          window.open("http://localhost:3000/auth/google", "_self")
+        }
+        className="flex flex-row cursor-pointer items-center gap-6 mt-4 border border-gray-300 p-2 rounded-lg hover:shadow-lg"
+      >
         <img src="/src/assets/google-logo-1.png" className="w-6" alt="Google" />
         <p className="font-medium text-xl">Continue with Google</p>
         <FaArrowRight className="ml-auto" />

@@ -2,6 +2,7 @@ export type UserState = {
   id: string;
   email: string;
   role: string;
+  avatarUrl: string;
   isAuthUser: boolean;
 };
 
@@ -19,4 +20,8 @@ export type RegisterForm = {
 export type LoginForm = {
   email: string;
   password: string;
+};
+
+export type UpdateForm = {
+  role: string;
 };

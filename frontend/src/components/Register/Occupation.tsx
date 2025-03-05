@@ -1,24 +1,42 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { RootState } from "../../store/store";
 import { setUser } from "../../store/userReducer";
+import { useMutation } from "@tanstack/react-query";
+import { createGoogleUser } from "../../apis/auth.api";
+import { onError } from "../../constants/onError";
 
 const Occupation = () => {
   const user = useSelector((state: RootState) => state.user);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const token = searchParams.get("token");
+
+  const { mutate } = useMutation({
+    mutationFn: (role: string) => createGoogleUser(token as string, role),
+    onSuccess: (res) => {
+      dispatch(setUser({ ...res?.data, role: "teacher", isAuthUser: true }));
+      navigate("/teacher");
+    },
+    onError: onError,
+  });
 
   const registerTeacher = () => {
-    dispatch(setUser({ ...user, role: "teacher" }));
-    navigate("/signup/teacher");
+    if (token) {
+      mutate("teacher");
+    } else {
+      dispatch(setUser({ ...user, role: "teacher" }));
+      navigate("/signup/teacher");
+    }
   };
 
   useEffect(() => {
-    if (!user.email) {
+    if (!user.email && !token) {
       navigate("/signup");
     }
-  }, [user, navigate]);
+  }, [user, navigate, token]);
 
   return (
     <div className="bg-gray-100 w-2/3 min-h-full mx-auto rounded-lg flex flex-col max-md:w-full px-8">

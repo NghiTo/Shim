@@ -22,3 +22,8 @@ export const resetPassword = async (token: string, password: string) => {
   });
   return res.data;
 };
+
+export const createGoogleUser = async (token: string, role: string) => {
+  const res = await axiosInstance.post("/auth/google", { token, role });
+  return res.data;
+};
