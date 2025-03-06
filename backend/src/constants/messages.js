@@ -13,6 +13,11 @@ const MESSAGES = {
     TOKEN_EXPIRED: "Token expired",
     TOKEN_INVALID: "Token invalid",
     TOKEN_REFRESH: "New token generated successfully",
+    FORBIDDEN: "You are not allowed to access this endpoint",
+  },
+  SCHOOL: {
+    FIND_SUCCESS: "School found successfully.",
+    NOT_FOUND: "School not found",
   },
 };
 

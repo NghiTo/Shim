@@ -17,6 +17,9 @@ const ERROR_CODES = {
     URL_NOT_FOUND: "AUTH_URL_NOT_FOUND",
     OTP_INVALID: "AUTH_OTP_INVALID",
   },
+  SCHOOL: {
+    NOT_FOUND: "SCHOOL_NOT_FOUND",
+  },
 };
 
 export default ERROR_CODES;

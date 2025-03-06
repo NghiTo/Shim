@@ -13,6 +13,6 @@ router.post(
 
 router.get("/:id", authenticate, userController.getUserById);
 
-router.put("/:id", userController.updateUser);
+router.put("/:id", authenticate, userController.updateUser);
 
 export default router;
