@@ -3,7 +3,10 @@ import { StatusCodes } from "http-status-codes";
 import authService from "../services/authService.js";
 import catchAsync from "../utils/catchAsync.js";
 import MESSAGES from "../constants/messages.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/generateTokens.js";
 
 const register = catchAsync(async (req, res) => {
   const user = await authService.register(req.body);
@@ -77,10 +80,21 @@ const createGoogleUser = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.USER.FIND_SUCCESS, data: user });
 });
 
+const generateNewToken = catchAsync(async (req, res) => {
+  const accessToken = await authService.generateNewToken(
+    req.cookies.refreshToken
+  );
+  res.status(StatusCodes.OK).json({
+    message: MESSAGES.AUTH.TOKEN_REFRESH,
+    accessToken,
+  });
+});
+
 export default {
   register,
   login,
   forgotPassword,
   resetPassword,
   createGoogleUser,
+  generateNewToken,
 };

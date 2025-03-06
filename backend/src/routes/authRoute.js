@@ -22,5 +22,6 @@ router.post(
   authController.resetPassword
 );
 router.post("/google", authController.createGoogleUser);
+router.post("/refresh", authController.generateNewToken);
 
 export default router;

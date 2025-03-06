@@ -12,6 +12,7 @@ const MESSAGES = {
     PASSWORD_RESET_SUCCESS: "Password reset successfully",
     TOKEN_EXPIRED: "Token expired",
     TOKEN_INVALID: "Token invalid",
+    TOKEN_REFRESH: "New token generated successfully",
   },
 };
 

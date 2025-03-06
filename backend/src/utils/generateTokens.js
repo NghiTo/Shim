@@ -6,7 +6,7 @@ dotenv.config({ path: path.resolve("environments/.env") });
 
 export const generateAccessToken = (user) => {
   const accessToken = jwt.sign(
-    { userId: user.id, role: user.role },
+    { id: user.id, role: user.role },
     process.env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: "15m",
@@ -17,7 +17,7 @@ export const generateAccessToken = (user) => {
 
 export const generateRefreshToken = (user) => {
   const refreshToken = jwt.sign(
-    { userId: user.id, role: user.role },
+    { id: user.id, role: user.role },
     process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: "1d",

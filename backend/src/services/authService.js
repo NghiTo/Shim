@@ -101,7 +101,7 @@ const forgotPassword = async (email) => {
 const resetPassword = async (token, password) => {
   const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-  const user = await userService.updateUser(decoded.userId, {
+  const user = await userService.updateUser(decoded.id, {
     password: hashedPassword,
   });
   return omit(user, ["password"]);
@@ -122,10 +122,44 @@ const createGoogleUser = async (data) => {
   return user;
 };
 
+const generateNewToken = async (refreshToken) => {
+  if (!refreshToken) {
+    throw new AppError({
+      message: MESSAGES.AUTH.TOKEN_INVALID,
+      errorCode: ERROR_CODES.AUTH.TOKEN_INVALID,
+      statusCode: StatusCodes.BAD_REQUEST,
+    });
+  }
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      throw new AppError({
+        message: MESSAGES.AUTH.TOKEN_INVALID,
+        errorCode: ERROR_CODES.AUTH.TOKEN_INVALID,
+        statusCode: StatusCodes.UNAUTHORIZED,
+      });
+    }
+
+    const newAccessToken = jwt.sign(
+      { id: decoded.id, role: decoded.role },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 15,
+    });
+
+    return res.json({ accessToken: newAccessToken });
+  });
+};
+
 export default {
   register,
   login,
   forgotPassword,
   resetPassword,
   createGoogleUser,
+  generateNewToken,
 };
