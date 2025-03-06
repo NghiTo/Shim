@@ -1,7 +1,7 @@
 import { FaPlus, FaRegBell } from "react-icons/fa6";
 import { TbMessageQuestion } from "react-icons/tb";
 import { Drawer, Menu, Popover } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";
 import { LuSettings } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
@@ -9,7 +9,7 @@ import { IoMdMenu } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 
 import defaultImg from "/src/assets/default-ava.png";
-import { sideBarItems } from "../../constants/constants";
+import { routeMap, sideBarItems } from "../../constants/constants";
 import { clearUser } from "../../store/userReducer";
 import { useState } from "react";
 import { RootState } from "../../store/store";
@@ -17,7 +17,21 @@ import { RootState } from "../../store/store";
 const NavBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const selectedKey = Object.keys(routeMap).find(
+    (key) => routeMap[key] === location.pathname
+  );
+
+  const handleMenuClick = ({ key }: { key: string }) => {
+    if (routeMap[key]) {
+      setOpenDrawer(false);
+      navigate(routeMap[key]);
+    }
+  };
 
   const handleLogout = () => {
     dispatch(clearUser());
@@ -26,7 +40,10 @@ const NavBar = () => {
 
   return (
     <div className="flex flex-row justify-end sticky z-10 top-0 bg-white items-center w-full py-2 px-4 gap-2 border-b border-gray-400">
-      <IoMdMenu className="mr-auto text-2xl cursor-pointer md:hidden" />
+      <IoMdMenu
+        onClick={() => setOpenDrawer(true)}
+        className="mr-auto text-2xl cursor-pointer md:hidden"
+      />
       <Drawer
         title={
           <img
@@ -37,9 +54,11 @@ const NavBar = () => {
         }
         placement={"left"}
         closable={true}
+        onClose={() => setOpenDrawer(false)}
+        open={openDrawer}
         width={200}
       >
-        <button className="bg-[#fe5f5c] w-11/12 ml-2 my-2 flex flex-row items-center justify-center gap-1 text-white rounded-md py-2 hover:bg-[#f8a09f]">
+        <button className="bg-[#fe5f5c] w-full my-2 flex flex-row items-center justify-center gap-1 text-white rounded-md py-2 hover:bg-[#f8a09f]">
           <FaPlus className="text-xs" />
           <p>Create</p>
         </button>
@@ -47,6 +66,8 @@ const NavBar = () => {
           mode="inline"
           theme="light"
           items={sideBarItems}
+          onClick={handleMenuClick}
+          selectedKeys={selectedKey ? [selectedKey] : []}
           className="text-sm"
         />
       </Drawer>

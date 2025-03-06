@@ -1,5 +1,8 @@
+import { School } from "./school.type";
+
 export type UserState = {
   id: string;
+  schoolId: string;
   email: string;
   role: string;
   avatarUrl: string;
@@ -23,5 +26,19 @@ export type LoginForm = {
 };
 
 export type UpdateForm = {
+  schoolId?: string;
+  role?: string;
+};
+
+export type Profile = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   role: string;
+  avatarUrl: string;
+  title: string;
+  subject: string;
+  grade: string;
+  school: School;
 };

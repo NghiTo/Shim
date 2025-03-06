@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { Link, useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/userReducer";
+import { RootState } from "../../store/store";
 
 interface MainLoginProps {
   setContinueEmail: (value: boolean) => void;
 }
 
 const MainLogin: React.FC<MainLoginProps> = ({ setContinueEmail }) => {
+  const user = useSelector((state: RootState) => state.user);
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
 
@@ -16,7 +18,7 @@ const MainLogin: React.FC<MainLoginProps> = ({ setContinueEmail }) => {
     if (searchParams.get("role")) {
       dispatch(
         setUser({
-          email: "",
+          ...user,
           id: searchParams.get("id") as string,
           avatarUrl: searchParams.get("avatarUrl") as string,
           role: searchParams.get("role") as string,
@@ -24,7 +26,7 @@ const MainLogin: React.FC<MainLoginProps> = ({ setContinueEmail }) => {
         })
       );
     }
-  }, [dispatch, searchParams]);
+  }, [dispatch, searchParams, user]);
 
   return (
     <div className="w-3/5 max-md:w-full py-4 px-8">

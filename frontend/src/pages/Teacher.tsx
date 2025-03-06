@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/Teacher/NavBar";
 import SideBar from "../components/Teacher/SideBar";
+import ChooseSchool from "../components/Teacher/ChooseSchool";
 
 const Teacher = () => {
   return (
     <div className="flex flex-row">
-      {/* <ChooseSchool /> */}
+      <ChooseSchool />
       {/* <CreatePassword /> */}
       <SideBar />
       <div className="flex flex-col w-full border-l border-gray-400">

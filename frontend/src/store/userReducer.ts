@@ -3,6 +3,7 @@ import { UserState } from "../types/user.type";
 
 const initialState: UserState = {
   id: "",
+  schoolId: "",
   email: "",
   role: "",
   avatarUrl: "",
@@ -15,6 +16,7 @@ const userSlice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<UserState>) {
       state.id = action.payload.id;
+      state.schoolId = action.payload.schoolId;
       state.email = action.payload.email;
       state.role = action.payload.role;
       state.avatarUrl = action.payload.avatarUrl;
@@ -22,6 +24,7 @@ const userSlice = createSlice({
     },
     clearUser(state) {
       state.id = "";
+      state.schoolId = "";
       state.email = "";
       state.role = "";
       state.avatarUrl = "";
