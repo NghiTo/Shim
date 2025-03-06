@@ -27,3 +27,8 @@ export const createGoogleUser = async (token: string, role: string) => {
   const res = await axiosInstance.post("/auth/google", { token, role });
   return res.data;
 };
+
+export const getNewAccessToken = async () => {
+  const res = await axiosInstance.post("/auth/refresh");
+  return res.data;
+};

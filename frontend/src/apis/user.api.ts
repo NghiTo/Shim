@@ -8,7 +8,7 @@ export const findUserByEmail = async (email: string) => {
 
 export const getUserById = async (id: string) => {
   const res = await axiosInstance.get(`/users/${id}`);
-  return res.data;
+  return res.data.data;
 };
 
 export const updateUser = async (id: string, data: UpdateForm) => {
