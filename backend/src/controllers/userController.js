@@ -9,6 +9,13 @@ const findUserByEmail = catchAsync(async (req, res) => {
   res.status(StatusCodes.OK).json({ message: MESSAGES.USER.FIND_SUCCESS });
 });
 
+const getUserById = catchAsync(async (req, res) => {
+  const user = await userService.getUserById(req.params.id);
+  res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.USER.FIND_SUCCESS, data: user });
+});
+
 const updateUser = async (req, res) => {
   const updatedUser = await userService.updateUser(req.params.id, req.body);
   res
@@ -18,5 +25,6 @@ const updateUser = async (req, res) => {
 
 export default {
   findUserByEmail,
-  updateUser
+  updateUser,
+  getUserById,
 };

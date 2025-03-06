@@ -10,6 +10,8 @@ const MESSAGES = {
     LOGIN_SUCCESS: "Login successfully",
     EMAIL_SENT: "Email sent successfully",
     PASSWORD_RESET_SUCCESS: "Password reset successfully",
+    TOKEN_EXPIRED: "Token expired",
+    TOKEN_INVALID: "Token invalid",
   },
 };
 
