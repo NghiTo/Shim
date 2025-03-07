@@ -61,8 +61,8 @@ const resetPassword = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.AUTH.PASSWORD_RESET_SUCCESS, data: user });
 });
 
-const createGoogleUser = catchAsync(async (req, res) => {
-  const user = await authService.createGoogleUser(req.body);
+const getGoogleUser = catchAsync(async (req, res) => {
+  const user = await authService.getGoogleUser(req.cookies.accessToken);
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
   res.cookie("accessToken", accessToken, {
@@ -84,10 +84,42 @@ const generateNewToken = catchAsync(async (req, res) => {
   const accessToken = await authService.generateNewToken(
     req.cookies.refreshToken
   );
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 15 * 6000 * 1000,
+  });
   res.status(StatusCodes.OK).json({
     message: MESSAGES.AUTH.TOKEN_REFRESH,
     accessToken,
   });
+});
+
+const createGoogleUser = catchAsync(async (req, res) => {
+  const user = await authService.createGoogleUser(req.body);
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 15 * 6000 * 1000,
+  });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.AUTH.REGISTER_SUCCESS, data: user });
+});
+
+const logout = catchAsync(async (req, res) => {
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+  return res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.AUTH.LOGOUT_SUCCESS });
 });
 
 export default {
@@ -95,6 +127,8 @@ export default {
   login,
   forgotPassword,
   resetPassword,
-  createGoogleUser,
+  getGoogleUser,
   generateNewToken,
+  createGoogleUser,
+  logout
 };

@@ -82,9 +82,20 @@ const loginSchema = celebrate({
   }),
 });
 
+const googleSchema = celebrate({
+  [Segments.BODY]: Joi.object({
+    email: emailField,
+    firstName: nameField,
+    lastName: nameField,
+    avatarUrl: Joi.string().required(),
+    role: roleField,
+  }),
+})
+
 export default {
   emailSchema,
   registerSchema,
   loginSchema,
   passwordSchema,
+  googleSchema
 };

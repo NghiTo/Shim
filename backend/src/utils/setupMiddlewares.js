@@ -41,26 +41,15 @@ export default function setupMiddlewares(app) {
     "/auth/google/callback",
     passport.authenticate("google", { failureRedirect: "/", session: false }),
     (req, res) => {
-      if (!req.user.role) {
-        res.redirect(
-          `${process.env.FRONT_END_URL}/signup/occupation?token=${req.user.token}`
-        );
+      res.cookie("accessToken", req.user.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 15 * 6000 * 1000,
+      });
+      if (!req.user.user.role) {
+        res.redirect(`${process.env.FRONT_END_URL}/signup/occupation`);
       } else {
-        const accessToken = generateAccessToken(req.user);
-        const refreshToken = generateRefreshToken(req.user);
-        res.cookie("accessToken", accessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 15 * 6000 * 1000,
-        });
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 24 * 60 * 60 * 1000,
-        });
-        res.redirect(
-          `${process.env.FRONT_END_URL}/login?id=${req.user.id}&role=${req.user.role}&avatarUrl=${req.user.avatarUrl}`
-        );
+        res.redirect(`${process.env.FRONT_END_URL}/${req.user.user.role}`);
       }
     }
   );

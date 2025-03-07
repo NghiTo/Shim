@@ -14,6 +14,8 @@ const MESSAGES = {
     TOKEN_INVALID: "Token invalid",
     TOKEN_REFRESH: "New token generated successfully",
     FORBIDDEN: "You are not allowed to access this endpoint",
+    UNAUTHORIZED: "Unauthorized",
+    LOGOUT_SUCCESS:"Log out successfully",
   },
   SCHOOL: {
     FIND_SUCCESS: "School found successfully.",

@@ -4,12 +4,16 @@ import { StatusCodes } from "http-status-codes";
 import pkg from "lodash";
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import path from "path";
 
 import { AppError } from "../utils/errorHandler.js";
 import MESSAGES from "../constants/messages.js";
 import ERROR_CODES from "../constants/errorCode.js";
 import userService from "./userService.js";
 import { generateAccessToken } from "../utils/generateTokens.js";
+
+dotenv.config({ path: path.resolve("environments/.env") });
 
 const SALT_ROUNDS = 10;
 const { omit } = pkg;
@@ -107,19 +111,13 @@ const resetPassword = async (token, password) => {
   return omit(user, ["password"]);
 };
 
-const createGoogleUser = async (data) => {
-  const decoded = jwt.verify(data.token, process.env.ACCESS_TOKEN_SECRET);
-  const user = await prisma.user.create({
-    data: {
-      email: decoded.email,
-      googleId: decoded.googleId,
-      firstName: decoded.firstName,
-      lastName: decoded.lastName,
-      avatarUrl: decoded.avatarUrl,
-      role: data.role,
-    },
-  });
-  return user;
+const getGoogleUser = async (token) => {
+  const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  if (!decoded.id) {
+    return decoded;
+  } else {
+    return omit(decoded, ["password"]);
+  }
 };
 
 const generateNewToken = async (refreshToken) => {
@@ -130,29 +128,36 @@ const generateNewToken = async (refreshToken) => {
       statusCode: StatusCodes.BAD_REQUEST,
     });
   }
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-    if (err) {
-      throw new AppError({
-        message: MESSAGES.AUTH.TOKEN_INVALID,
-        errorCode: ERROR_CODES.AUTH.TOKEN_INVALID,
-        statusCode: StatusCodes.UNAUTHORIZED,
-      });
-    }
-
-    const newAccessToken = jwt.sign(
-      { id: decoded.id, role: decoded.role },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
+  const res = await new Promise((resolve, reject) => {
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      (err, decoded) => {
+        if (err) {
+          return reject(
+            new AppError({
+              message: MESSAGES.AUTH.TOKEN_INVALID,
+              errorCode: ERROR_CODES.AUTH.TOKEN_INVALID,
+              statusCode: StatusCodes.UNAUTHORIZED,
+            })
+          );
+        }
+        resolve(decoded);
+      }
     );
-
-    res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 15,
-    });
-
-    return res.json({ accessToken: newAccessToken });
   });
+  const newAccessToken = jwt.sign(
+    { id: res.id, role: res.role },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "15m" }
+  );
+
+  return newAccessToken;
+};
+
+const createGoogleUser = async (data) => {
+  const user = await prisma.user.create({ data });
+  return omit(user, ["password"]);
 };
 
 export default {
@@ -160,6 +165,7 @@ export default {
   login,
   forgotPassword,
   resetPassword,
-  createGoogleUser,
+  getGoogleUser,
   generateNewToken,
+  createGoogleUser
 };

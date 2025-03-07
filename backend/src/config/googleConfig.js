@@ -26,13 +26,11 @@ export const googleOauth = new GoogleStrategy(
           lastName: profile.name.familyName,
           avatarUrl: profile.photos[0].value,
         };
-        const token = jwt.sign({ ...user }, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: "15m",
-        });
-        return done(null, { user, token });
-      } else {
-        return done(null, user);
       }
+      const token = jwt.sign({ ...user }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "15m",
+      });
+      return done(null, { user, token });
     } catch (error) {
       return done(error, null);
     }
