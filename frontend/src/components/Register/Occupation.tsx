@@ -1,42 +1,49 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../../store/store";
 import { setUser } from "../../store/userReducer";
-import { useMutation } from "@tanstack/react-query";
-import { createGoogleUser } from "../../apis/auth.api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { onError } from "../../constants/onError";
+import { createGoogleUser } from "../../apis/auth.api";
+import { GoogleForm } from "../../types/user.type";
 
 const Occupation = () => {
   const user = useSelector((state: RootState) => state.user);
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = searchParams.get("token");
+  const queryClient = useQueryClient();
+  const cachedData = queryClient.getQueryData<GoogleForm>(["google"]);
 
   const { mutate } = useMutation({
-    mutationFn: (role: string) => createGoogleUser(token as string, role),
+    mutationFn: createGoogleUser,
     onSuccess: (res) => {
-      dispatch(setUser({ ...res?.data, role: "teacher", isAuthUser: true }));
-      navigate("/teacher");
+      dispatch(setUser({ ...user, ...res.data, isAuthUser: true }));
+      navigate(`${res.data.role}`);
     },
     onError: onError,
   });
 
   const registerTeacher = () => {
-    if (token) {
-      mutate("teacher");
-    } else {
+    if (!cachedData) {
       dispatch(setUser({ ...user, role: "teacher" }));
       navigate("/signup/teacher");
+    } else {
+      mutate({
+        firstName: cachedData.firstName,
+        lastName: cachedData.lastName,
+        email: cachedData.email,
+        avatarUrl: cachedData.avatarUrl,
+        role: "teacher",
+      });
     }
   };
 
   useEffect(() => {
-    if (!user.email && !token) {
+    if (!user.email) {
       navigate("/signup");
     }
-  }, [user, navigate, token]);
+  }, [user, navigate]);
 
   return (
     <div className="bg-gray-100 w-2/3 min-h-full mx-auto rounded-lg flex flex-col max-md:w-full px-8">

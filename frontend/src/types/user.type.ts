@@ -42,3 +42,11 @@ export type Profile = {
   grade: string;
   school: School;
 };
+
+export type GoogleForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatarUrl: string;
+  role: string;
+}

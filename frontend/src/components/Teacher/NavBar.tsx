@@ -13,6 +13,9 @@ import { routeMap, sideBarItems } from "../../constants/constants";
 import { clearUser } from "../../store/userReducer";
 import { useState } from "react";
 import { RootState } from "../../store/store";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "../../apis/auth.api";
+import { onError } from "../../constants/onError";
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -33,7 +36,10 @@ const NavBar = () => {
     }
   };
 
+  const { mutate } = useMutation({ mutationFn: logout, onError: onError });
+
   const handleLogout = () => {
+    mutate();
     dispatch(clearUser());
     setPopoverVisible(false);
   };

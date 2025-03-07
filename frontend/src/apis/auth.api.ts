@@ -1,4 +1,4 @@
-import { LoginForm, RegisterForm } from "../types/user.type";
+import { GoogleForm, LoginForm, RegisterForm } from "../types/user.type";
 import axiosInstance from "../utils/http";
 
 export const register = async (data: RegisterForm) => {
@@ -23,12 +23,22 @@ export const resetPassword = async (token: string, password: string) => {
   return res.data;
 };
 
-export const createGoogleUser = async (token: string, role: string) => {
-  const res = await axiosInstance.post("/auth/google", { token, role });
-  return res.data;
-};
-
 export const getNewAccessToken = async () => {
   const res = await axiosInstance.post("/auth/refresh");
   return res.data;
+};
+
+export const createGoogleUser = async (data: GoogleForm) => {
+  const res = await axiosInstance.post("/auth/google", data);
+  return res.data;
+};
+
+export const logout = async () => {
+  const res = await axiosInstance.post("/auth/logout");
+  return res.data;
+}
+
+export const getGoogleUser = async () => {
+  const res = await axiosInstance.get("/auth/google");
+  return res.data.data;
 };
