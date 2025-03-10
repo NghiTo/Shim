@@ -20,13 +20,11 @@ export const subjectSchema: Rule[] = [
 export const firstNameSchema: Rule[] = [
   { required: true, message: "First name is required" },
   { min: 2, max: 50, message: "Invalid first name length" },
-  { pattern: /^[A-Za-z]+$/, message: "First name can only contain letters" },
 ];
 
 export const lastNameSchema: Rule[] = [
   { required: true, message: "Last name is required" },
   { min: 2, max: 50, message: "Invalid last name length" },
-  { pattern: /^[A-Za-z]+$/, message: "Last name can only contain letters" },
 ];
 
 export const passwordSchema: Rule[] = [

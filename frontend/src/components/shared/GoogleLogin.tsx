@@ -20,7 +20,7 @@ const GoogleLogin = ({ children }: GoogleLoginProps) => {
     queryFn: getGoogleUser,
     staleTime: 1000 * 5,
   });
-
+  
   useEffect(() => {
     if (data && !isDispatched) {
       if (data.id) {

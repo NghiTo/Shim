@@ -18,7 +18,9 @@ const Occupation = () => {
   const { mutate } = useMutation({
     mutationFn: createGoogleUser,
     onSuccess: (res) => {
-      dispatch(setUser({ ...user, ...res.data, isAuthUser: true }));
+      dispatch(
+        setUser({ ...user, ...res.data, isAuthUser: true, isGoogleAuth: true })
+      );
       navigate(`${res.data.role}`);
     },
     onError: onError,

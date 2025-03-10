@@ -1,4 +1,3 @@
-import { UpdateForm } from "../types/user.type";
 import axiosInstance from "../utils/http";
 
 export const findUserByEmail = async (email: string) => {
@@ -11,7 +10,11 @@ export const getUserById = async (id: string) => {
   return res.data.data;
 };
 
-export const updateUser = async (id: string, data: UpdateForm) => {
-  const res = await axiosInstance.put(`/users/${id}`, data);
+export const updateUser = async (id: string, data: FormData) => {
+  const res = await axiosInstance.put(`/users/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return res.data;
 };

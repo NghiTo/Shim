@@ -8,6 +8,7 @@ const initialState: UserState = {
   role: "",
   avatarUrl: "",
   isAuthUser: false,
+  isGoogleAuth: false,
 };
 
 const userSlice = createSlice({
@@ -21,6 +22,7 @@ const userSlice = createSlice({
       state.role = action.payload.role;
       state.avatarUrl = action.payload.avatarUrl;
       state.isAuthUser = action.payload.isAuthUser;
+      state.isGoogleAuth = action.payload.isGoogleAuth;
     },
     clearUser(state) {
       state.id = "";
@@ -29,6 +31,7 @@ const userSlice = createSlice({
       state.role = "";
       state.avatarUrl = "";
       state.isAuthUser = false;
+      state.isGoogleAuth = false;
     },
   },
 });

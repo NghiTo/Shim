@@ -7,6 +7,7 @@ export type UserState = {
   role: string;
   avatarUrl: string;
   isAuthUser: boolean;
+  isGoogleAuth: boolean;
 };
 
 export type RegisterForm = {
@@ -28,6 +29,7 @@ export type LoginForm = {
 export type UpdateForm = {
   schoolId?: string;
   role?: string;
+  password?: string;
 };
 
 export type Profile = {
