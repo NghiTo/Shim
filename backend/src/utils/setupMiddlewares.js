@@ -44,7 +44,7 @@ export default function setupMiddlewares(app) {
       res.cookie("accessToken", req.user.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: 15 * 6000 * 1000,
+        maxAge: 15 * 60 * 1000,
       });
       if (!req.user.user.role) {
         res.redirect(`${process.env.FRONT_END_URL}/signup/occupation`);

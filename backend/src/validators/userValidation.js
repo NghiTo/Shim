@@ -12,19 +12,13 @@ const passwordField = Joi.string().min(8).required().messages({
   "any.required": "Password is a required field",
 });
 
-const nameField = Joi.string()
-  .min(2)
-  .max(50)
-  .pattern(/^[A-Za-z]+$/)
-  .required()
-  .messages({
-    "string.base": "Name must be a string",
-    "string.empty": "Name is required",
-    "string.min": "Name must be at least 2 characters",
-    "string.max": "Name cannot exceed 50 characters",
-    "string.pattern.base": "Name can only contain letters",
-    "any.required": "Name is required",
-  });
+const nameField = Joi.string().min(2).max(50).required().messages({
+  "string.base": "Name must be a string",
+  "string.empty": "Name is required",
+  "string.min": "Name must be at least 2 characters",
+  "string.max": "Name cannot exceed 50 characters",
+  "any.required": "Name is required",
+});
 
 const roleField = Joi.string()
   .valid("student", "teacher", "admin")
@@ -90,12 +84,12 @@ const googleSchema = celebrate({
     avatarUrl: Joi.string().required(),
     role: roleField,
   }),
-})
+});
 
 export default {
   emailSchema,
   registerSchema,
   loginSchema,
   passwordSchema,
-  googleSchema
+  googleSchema,
 };

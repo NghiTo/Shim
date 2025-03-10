@@ -112,12 +112,21 @@ const resetPassword = async (token, password) => {
 };
 
 const getGoogleUser = async (token) => {
-  const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-  if (!decoded.id) {
-    return decoded;
-  } else {
-    return omit(decoded, ["password"]);
-  }
+  const res = await new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        return reject(
+          new AppError({
+            message: MESSAGES.AUTH.TOKEN_INVALID,
+            errorCode: ERROR_CODES.AUTH.TOKEN_INVALID,
+            statusCode: StatusCodes.UNAUTHORIZED,
+          })
+        );
+      }
+      resolve(decoded);
+    });
+  });
+  return res;
 };
 
 const generateNewToken = async (refreshToken) => {
@@ -167,5 +176,5 @@ export default {
   resetPassword,
   getGoogleUser,
   generateNewToken,
-  createGoogleUser
+  createGoogleUser,
 };

@@ -15,7 +15,7 @@ const register = catchAsync(async (req, res) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    maxAge: 15 * 6000 * 1000,
+    maxAge: 15 * 60 * 1000,
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -34,7 +34,7 @@ const login = catchAsync(async (req, res) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    maxAge: 15 * 6000 * 1000,
+    maxAge: 15 * 60 * 1000,
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -63,13 +63,7 @@ const resetPassword = catchAsync(async (req, res) => {
 
 const getGoogleUser = catchAsync(async (req, res) => {
   const user = await authService.getGoogleUser(req.cookies.accessToken);
-  const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 15 * 6000 * 1000,
-  });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -87,7 +81,7 @@ const generateNewToken = catchAsync(async (req, res) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    maxAge: 15 * 6000 * 1000,
+    maxAge: 15 * 60 * 1000,
   });
   res.status(StatusCodes.OK).json({
     message: MESSAGES.AUTH.TOKEN_REFRESH,
@@ -102,7 +96,7 @@ const createGoogleUser = catchAsync(async (req, res) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    maxAge: 15 * 6000 * 1000,
+    maxAge: 15 * 60 * 1000,
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,

@@ -1,10 +1,13 @@
 import omit from "lodash/omit.js";
 import { StatusCodes } from "http-status-codes";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 import ERROR_CODES from "../constants/errorCode.js";
 import MESSAGES from "../constants/messages.js";
 import { AppError } from "../utils/errorHandler.js";
+import s3 from "../config/awsConfig.js";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 const prisma = new PrismaClient();
 
@@ -45,6 +48,24 @@ const updateUser = async (id, data) => {
       errorCode: ERROR_CODES.USER.NOT_FOUND,
       statusCode: StatusCodes.NOT_FOUND,
     });
+  }
+  if (data.password) {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    data = { ...data, password: hashedPassword };
+  }
+  if (data.avatarUrl && data.avatarUrl.buffer) {
+    const fileKey = `users/${id}-${data.avatarUrl.originalname}`;
+    const uploadParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: fileKey,
+      Body: data.avatarUrl.buffer,
+      ContentType: data.avatarUrl.mimetype,
+    };
+    await s3.send(new PutObjectCommand(uploadParams));
+    data = {
+      ...data,
+      avatarUrl: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`,
+    };
   }
   const updatedUser = await prisma.user.update({
     where: { id },

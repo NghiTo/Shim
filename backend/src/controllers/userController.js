@@ -17,6 +17,9 @@ const getUserById = catchAsync(async (req, res) => {
 });
 
 const updateUser = async (req, res) => {
+  if (req.file) { 
+    req.body.avatarUrl = req.file;
+  }
   const updatedUser = await userService.updateUser(req.params.id, req.body);
   res
     .status(StatusCodes.OK)
