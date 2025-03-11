@@ -50,7 +50,7 @@ const UserInfo = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-8 max-md:py-8 max-md:px-0 max-md:min-h-screen h-full">
+    <div className="bg-gray-100 p-8 max-md:py-8 max-md:px-0 max-md:min-h-screen h-full w-full">
       <div className="rounded-xl bg-white p-8 max-md:p-4 flex flex-row gap-8 max-md:gap-2">
         <div
           onClick={handleImageClick}

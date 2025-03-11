@@ -52,3 +52,9 @@ export type GoogleForm = {
   avatarUrl: string;
   role: string;
 }
+
+export type PasswordForm = {
+  oldPassword: string;
+  password: string;
+  confirmPassword: string;
+}

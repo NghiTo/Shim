@@ -15,6 +15,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import UserInfo from "./components/Teacher/Profile/UserInfo";
 import GoogleLogin from "./components/shared/GoogleLogin";
+import Setting from "./components/Teacher/Setting/Setting";
 
 const Home = lazy(() => import("./pages/Home"));
 const Teacher = lazy(() => import("./pages/Teacher"));
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
       {
         path: "/teacher/profile/:id",
         element: <UserInfo />,
+      },
+      {
+        path: "/teacher/settings",
+        element: <Setting />,
       },
     ],
   },

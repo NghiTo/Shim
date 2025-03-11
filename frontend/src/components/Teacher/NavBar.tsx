@@ -103,6 +103,7 @@ const NavBar = () => {
             </Link>
             <Link
               to={"/teacher/settings"}
+              onClick={() => setPopoverVisible(false)}
               className="flex flex-row items-center text-gray-800 gap-2 hover:text-[#fe5f5c]"
             >
               <LuSettings />

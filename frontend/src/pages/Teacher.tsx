@@ -6,7 +6,7 @@ import CreatePassword from "../components/Teacher/CreatePassword";
 
 const Teacher = () => {
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row w-screen">
       <ChooseSchool />
       <CreatePassword />
       <SideBar />
