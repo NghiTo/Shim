@@ -16,15 +16,15 @@ const getUserById = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.USER.FIND_SUCCESS, data: user });
 });
 
-const updateUser = async (req, res) => {
-  if (req.file) { 
+const updateUser = catchAsync(async (req, res) => {
+  if (req.file) {
     req.body.avatarUrl = req.file;
   }
   const updatedUser = await userService.updateUser(req.params.id, req.body);
   res
     .status(StatusCodes.OK)
     .json({ message: MESSAGES.USER.UPDATE_SUCCESS, data: updatedUser });
-};
+});
 
 export default {
   findUserByEmail,

@@ -16,6 +16,7 @@ const MESSAGES = {
     FORBIDDEN: "You are not allowed to access this endpoint",
     UNAUTHORIZED: "Unauthorized",
     LOGOUT_SUCCESS:"Log out successfully",
+    PASSWORD_INCORRECT:"Password incorrect",
   },
   SCHOOL: {
     FIND_SUCCESS: "School found successfully.",

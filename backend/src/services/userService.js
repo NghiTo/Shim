@@ -49,6 +49,17 @@ const updateUser = async (id, data) => {
       statusCode: StatusCodes.NOT_FOUND,
     });
   }
+  if (data.currentPassword) {
+    const isMatch = await bcrypt.compare(data.currentPassword, user.password);
+    if (!isMatch) {
+      throw new AppError({
+        message: MESSAGES.AUTH.PASSWORD_INCORRECT,
+        errorCode: ERROR_CODES.AUTH.PASSWORD_INCORRECT,
+        statusCode: StatusCodes.BAD_REQUEST,
+      });
+    }
+    data = omit(data, ["currentPassword"]);
+  }
   if (data.password) {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     data = { ...data, password: hashedPassword };
