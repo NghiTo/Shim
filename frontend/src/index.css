@@ -4,3 +4,8 @@
   color: #fe5f5c !important;
   background: none !important;
 }
+
+a {
+  color: inherit !important;
+  text-decoration: none !important;
+}

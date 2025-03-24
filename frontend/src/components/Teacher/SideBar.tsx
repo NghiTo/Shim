@@ -2,12 +2,17 @@ import { Menu } from "antd";
 import { FaPlus } from "react-icons/fa6";
 import { routeMap, sideBarItems } from "../../constants/constants";
 import { useLocation, useNavigate } from "react-router-dom";
+import CreateModal from "./CreateModal";
+import { useState } from "react";
 
 const SideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const selectedKey = Object.keys(routeMap).find((key) => routeMap[key] === location.pathname);
+  const selectedKey = Object.keys(routeMap).find(
+    (key) => routeMap[key] === location.pathname
+  );
 
   const handleMenuClick = ({ key }: { key: string }) => {
     if (routeMap[key]) {
@@ -22,7 +27,10 @@ const SideBar = () => {
         alt="Logo"
         className="object-cover w-2/5 flex mx-auto mb-3"
       />
-      <button className="bg-[#fe5f5c] mx-2 flex flex-row items-center justify-center gap-1 text-white rounded-md py-2 hover:bg-[#fc8785] transition-all ease-in-out">
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="bg-[#fe5f5c] mx-2 flex flex-row hover:cursor-pointer items-center justify-center gap-1 text-white rounded-md py-2 hover:bg-[#fc8785] transition-all ease-in-out"
+      >
         <FaPlus className="text-xs" />
         <p>Create</p>
       </button>
@@ -33,6 +41,10 @@ const SideBar = () => {
         className="text-sm"
         onClick={handleMenuClick}
         selectedKeys={selectedKey ? [selectedKey] : []}
+      />
+      <CreateModal
+        isModalOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
       />
     </div>
   );
