@@ -169,6 +169,71 @@ const createGoogleUser = async (data) => {
   return omit(user, ["password"]);
 };
 
+const otpStore = new Map();
+
+const sendOtp = async (userId) => {
+  const { email } = await userService.getUserById(userId);
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  otpStore.set(email, otp);
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.MAIL_USERNAME,
+      pass: process.env.MAIL_PASSWORD,
+    },
+  });
+
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+      <h2 style="color: #333; text-align: center;">Verify Your Account</h2>
+      <p style="font-size: 16px; color: #555;">
+        Hello, 
+      </p>
+      <p style="font-size: 16px; color: #555;">
+        You requested to delete your Shim account. Please use the following OTP to verify your identity:
+      </p>
+      <p style="font-size: 24px; font-weight: bold; text-align: center; color: #4caf50;">
+        ${otp}
+      </p>
+      <p style="font-size: 16px; color: #555;">
+        If you did not request this action, please ignore this email or contact our support team.
+      </p>
+      <p style="font-size: 14px; color: #999; text-align: center;">
+        © ${new Date().getFullYear()} Shim Inc. All rights reserved.
+      </p>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: {
+      name: "Shim",
+      address: process.env.MAIL_USERNAME,
+    },
+    to: email,
+    subject: "OTP for deleting Shim account (no reply)",
+    html: htmlContent,
+  });
+
+  return;
+};
+
+const verifyOtp = async (userId, otp) => {
+  const { email, id } = await userService.getUserById(userId);
+  if (otpStore.get(email) == otp) {
+    otpStore.delete(email);
+    return id;
+  } else {
+    throw new AppError({
+      message: MESSAGES.AUTH.OTP_INVALID,
+      errorCode: ERROR_CODES.AUTH.OTP_INVALID,
+      statusCode: StatusCodes.BAD_REQUEST,
+    });
+  }
+};
+
 export default {
   register,
   login,
@@ -177,4 +242,6 @@ export default {
   getGoogleUser,
   generateNewToken,
   createGoogleUser,
+  sendOtp,
+  verifyOtp,
 };

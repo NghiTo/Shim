@@ -7,6 +7,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/generateTokens.js";
+import userService from "../services/userService.js";
 
 const register = catchAsync(async (req, res) => {
   const user = await authService.register(req.body);
@@ -116,6 +117,21 @@ const logout = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.AUTH.LOGOUT_SUCCESS });
 });
 
+const sendOtp = catchAsync(async (req, res) => {
+  await authService.sendOtp(req.user.id);
+  return res.status(StatusCodes.OK).json({ message: MESSAGES.AUTH.OTP_SENT });
+});
+
+const deleteUser = catchAsync(async (req, res) => {
+  const id = await authService.verifyOtp(req.user.id, req.body.otp);
+  await userService.deleteUser(id);
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+  return res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.USER.DELETE_SUCCESS });
+});
+
 export default {
   register,
   login,
@@ -124,5 +140,7 @@ export default {
   getGoogleUser,
   generateNewToken,
   createGoogleUser,
-  logout
+  logout,
+  sendOtp,
+  deleteUser,
 };
