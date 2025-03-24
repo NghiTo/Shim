@@ -2,12 +2,12 @@ import omit from "lodash/omit.js";
 import { StatusCodes } from "http-status-codes";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
 import ERROR_CODES from "../constants/errorCode.js";
 import MESSAGES from "../constants/messages.js";
 import { AppError } from "../utils/errorHandler.js";
 import s3 from "../config/awsConfig.js";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 const prisma = new PrismaClient();
 
@@ -86,13 +86,25 @@ const updateUser = async (id, data) => {
 };
 
 const deleteUser = async (id) => {
+  const user = await getUserById(id);
+  if (user.avatarUrl) {
+    const s3Url = new URL(user.avatarUrl);
+    const key = decodeURIComponent(s3Url.pathname).substring(1);
+
+    const deleteParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+    };
+
+    await s3.send(new DeleteObjectCommand(deleteParams));
+  }
   await prisma.user.delete({ where: { id } });
-  return
+  return;
 };
 
 export default {
   findUserByEmail,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
 };
