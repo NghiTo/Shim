@@ -41,3 +41,5 @@ export const confirmPasswordSchema = (form: FormInstance): Rule[] => [
         : Promise.reject(new Error("Passwords do not match")),
   },
 ];
+
+export const otpSchema = [{ required: true, message: "Otp is required" }];

@@ -16,6 +16,7 @@ import ResetPassword from "./pages/ResetPassword";
 import UserInfo from "./components/Teacher/Profile/UserInfo";
 import GoogleLogin from "./components/shared/GoogleLogin";
 import Setting from "./components/Teacher/Setting/Setting";
+import DeleteAccount from "./pages/DeleteAccount";
 
 const Home = lazy(() => import("./pages/Home"));
 const Teacher = lazy(() => import("./pages/Teacher"));
@@ -85,6 +86,14 @@ const router = createBrowserRouter([
       </RejectedRoute>
     ),
     errorElement: <ErrorFallback />,
+  },
+  {
+    path: "/delete-account",
+    element: (
+      <ProtectedRoute>
+        <DeleteAccount />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/teacher",

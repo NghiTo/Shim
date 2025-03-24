@@ -19,7 +19,7 @@ const CreatePassword = () => {
   const dispatch = useDispatch();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (password: string) => updateUser(user.id, { password }),
+    mutationFn: (data: FormData) => updateUser(user.id, data),
     onSuccess: () => {
       message.success("Password updated successfully");
       dispatch(setUser({ ...user, isGoogleAuth: false }));
@@ -27,11 +27,17 @@ const CreatePassword = () => {
     },
   });
 
+  const onSubmit = (password: string) => {
+    const formData = new FormData();
+    formData.append("password", password);
+    mutate(formData);
+  };
+
   useEffect(() => {
-    if (user.isGoogleAuth) {
+    if (user.isGoogleAuth && user.schoolId) {
       setIsModalOpen(true);
     }
-  }, [user.isGoogleAuth]);
+  }, [user]);
 
   return (
     <Modal
@@ -47,7 +53,7 @@ const CreatePassword = () => {
       <Form
         form={form}
         layout="vertical"
-        onFinish={(data) => mutate(data.password)}
+        onFinish={(data) => onSubmit(data.password)}
         onValuesChange={(_, allValues) => {
           const { password, confirmPassword } = allValues;
           if (password && confirmPassword) {

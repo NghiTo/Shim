@@ -13,17 +13,28 @@ import { updateUser } from "../../../apis/user.api";
 import { useState } from "react";
 import { PasswordForm } from "../../../types/user.type";
 import { onError } from "../../../constants/onError";
+import { sendOtp } from "../../../apis/auth.api";
+import { useNavigate } from "react-router-dom";
 
 const Setting = () => {
   const [form] = useForm();
+  const navigate = useNavigate();
   const [isFillForm, setIsFillForm] = useState(false);
   const user = useSelector((state: RootState) => state.user);
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: FormData) => updateUser(user.id, data),
     onSuccess: () => {
       message.success("Password updated successfully");
       form.resetFields();
+    },
+    onError: onError,
+  });
+
+  const { mutate: mutateDelete, isPending: isLoading } = useMutation({
+    mutationFn: sendOtp,
+    onSuccess: () => {
+      navigate("/delete-account");
     },
     onError: onError,
   });
@@ -96,6 +107,7 @@ const Setting = () => {
             htmlType="submit"
             danger
             type="primary"
+            loading={isPending}
             disabled={!isFillForm}
             className="w-full py-5"
           >
@@ -107,30 +119,31 @@ const Setting = () => {
             <MdManageAccounts className="text-2xl" />
             <p>Change account type</p>
           </div>
-          <Popconfirm
-            title="Delete the task"
-            description="Are you sure to convert to student?"
-            // onConfirm={() => confirm(user.id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <button className="py-2 rounded-lg bg-[#1677ff] text-white hover:bg-[#68a5fa] transition-all ease-in-out">
-              Convert to student account
-            </button>
-          </Popconfirm>
+          <button className="py-2 rounded-lg bg-[#1677ff] text-white hover:bg-[#68a5fa] transition-all ease-in-out">
+            Convert to student account
+          </button>
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-row items-center gap-2 py-2 mt-4 border-b border-gray-400">
             <FaTrash />
             <p>Delete account</p>
           </div>
-          <Button
-            // onClick={() => send()}
-            // loading={isLoading}
-            className="py-4 border text-base border-[#fe5f5c] text-[#fe5f5c] hover:bg-[#fe5f5c] hover:text-white transition-all ease-in-out"
+          <Popconfirm
+            title="Delete account"
+            description="Are you sure to delete your account?"
+            okText="Yes"
+            onConfirm={() => mutateDelete()}
+            okButtonProps={{ danger: true }}
+            cancelButtonProps={{ danger: true }}
+            cancelText="No"
           >
-            Permanently delete your account
-          </Button>
+            <Button
+              loading={isLoading}
+              className="py-4 border text-base border-[#fe5f5c] text-[#fe5f5c] hover:bg-[#fe5f5c] hover:text-white transition-all ease-in-out"
+            >
+              Permanently delete your account
+            </Button>
+          </Popconfirm>
         </div>
       </div>
     </div>

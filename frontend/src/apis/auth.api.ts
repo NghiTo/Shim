@@ -36,9 +36,19 @@ export const createGoogleUser = async (data: GoogleForm) => {
 export const logout = async () => {
   const res = await axiosInstance.post("/auth/logout");
   return res.data;
-}
+};
 
 export const getGoogleUser = async () => {
   const res = await axiosInstance.get("/auth/google");
   return res.data.data;
+};
+
+export const sendOtp = async () => {
+  const res = await axiosInstance.post("/auth/send-otp");
+  return res.data;
+};
+
+export const deleteUser = async (otp: string) => {
+  const res = await axiosInstance.post("/auth/user", { otp });
+  return res.data;
 };

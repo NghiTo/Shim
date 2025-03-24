@@ -34,8 +34,7 @@ const ChooseSchool = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (schoolId: string) =>
-      updateUser(user.id as string, { schoolId }),
+    mutationFn: (data: FormData) => updateUser(user.id as string, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
       message.success("Update school successfully");
@@ -44,7 +43,9 @@ const ChooseSchool = () => {
 
   const handleSave = () => {
     if (selectedSchool) {
-      mutate(selectedSchool.id);
+      const formData = new FormData();
+      formData.append("schoolId", selectedSchool.id);
+      mutate(formData);
       dispatch(setUser({ ...user, schoolId: selectedSchool.id }));
       setIsModalOpen(false);
     }
