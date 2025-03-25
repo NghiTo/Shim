@@ -3,11 +3,19 @@ import { RiBook2Line } from "react-icons/ri";
 import { IoPieChartOutline } from "react-icons/io5";
 import { SiGoogleclassroom } from "react-icons/si";
 import {
+  FaChartBar,
+  FaCheck,
+  FaHand,
   FaHandHoldingHeart,
   FaHouse,
+  FaLayerGroup,
   FaQuestion,
   FaSchool,
 } from "react-icons/fa6";
+import { LuFileType2, LuRectangleHorizontal } from "react-icons/lu";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { BiCategory, BiMath } from "react-icons/bi";
+import { MdLabel } from "react-icons/md";
 
 export const titleOptions = [
   { value: "Mr", label: "Mr" },
@@ -134,3 +142,20 @@ export const routeMap: { [key: string]: string } = {
   "9": "/teacher/contact-support",
   "10": "/teacher/help-center",
 };
+
+export const questionTypes = [
+  { label: "multipleChoice", icon: <FaCheck />, color: "#8854c0" },
+  {
+    label: "fillInTheBlank",
+    icon: <LuRectangleHorizontal />,
+    color: "#8854c0",
+  },
+  { label: "openEnded", icon: <LuFileType2 />, color: "#2d70ae" },
+  { label: "Poll", icon: <FaChartBar />, color: "#2d70ae" },
+  { label: "Match", icon: <FaLayerGroup />, color: "#00a06a" },
+  { label: "Drag and Drop", icon: <FaHand />, color: "#00a06a" },
+  { label: "Drop Down", icon: <IoMdArrowDropdown />, color: "#e57c1a" },
+  { label: "Categorize", icon: <BiCategory />, color: "#e57c1a" },
+  { label: "Labeling", icon: <MdLabel />, color: "red" },
+  { label: "Math Response", icon: <BiMath />, color: "red" },
+];

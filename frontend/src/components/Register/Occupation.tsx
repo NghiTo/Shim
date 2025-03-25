@@ -6,7 +6,7 @@ import { setUser } from "../../store/userReducer";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { onError } from "../../constants/onError";
 import { createGoogleUser } from "../../apis/auth.api";
-import { GoogleForm } from "../../types/user.type";
+import { GoogleForm } from "../../types/user";
 
 const Occupation = () => {
   const user = useSelector((state: RootState) => state.user);

@@ -3,12 +3,16 @@ import { FaPlus } from "react-icons/fa6";
 import { routeMap, sideBarItems } from "../../constants/constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import CreateModal from "./CreateModal";
-import { useState } from "react";
+import React from "react";
 
-const SideBar = () => {
+interface SideBarProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (value: boolean) => void;
+}
+
+const SideBar: React.FC<SideBarProps> = ({ isModalOpen, setIsModalOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const selectedKey = Object.keys(routeMap).find(
     (key) => routeMap[key] === location.pathname

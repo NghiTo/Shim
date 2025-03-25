@@ -1,4 +1,4 @@
-import { GoogleForm, LoginForm, RegisterForm } from "../types/user.type";
+import { GoogleForm, LoginForm, RegisterForm } from "../types/user";
 import axiosInstance from "../utils/http";
 
 export const register = async (data: RegisterForm) => {

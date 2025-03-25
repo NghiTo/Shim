@@ -20,7 +20,7 @@ import {
 } from "../../schemas/userSchema";
 import { RootState } from "../../store/store";
 import { register } from "../../apis/auth.api";
-import { RegisterForm } from "../../types/user.type";
+import { RegisterForm } from "../../types/user";
 import { onError } from "../../constants/onError";
 import { setUser } from "../../store/userReducer";
 

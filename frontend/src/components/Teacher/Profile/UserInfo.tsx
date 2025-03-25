@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import defaultImg from "/src/assets/default-ava.png";
 import { RootState } from "../../../store/store";
 import { getUserById, updateUser } from "../../../apis/user.api";
-import { Profile } from "../../../types/user.type";
+import { Profile } from "../../../types/user";
 import { message, Skeleton, Spin } from "antd";
 import EditProfile from "./EditProfile";
 import { setUser } from "../../../store/userReducer";

@@ -11,13 +11,17 @@ import { useDispatch, useSelector } from "react-redux";
 import defaultImg from "/src/assets/default-ava.png";
 import { routeMap, sideBarItems } from "../../constants/constants";
 import { clearUser } from "../../store/userReducer";
-import { useState } from "react";
+import React, { useState } from "react";
 import { RootState } from "../../store/store";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../../apis/auth.api";
 import { onError } from "../../constants/onError";
 
-const NavBar = () => {
+interface NavBarProps {
+  setIsModalOpen: (value: boolean) => void;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ setIsModalOpen }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -64,7 +68,10 @@ const NavBar = () => {
         open={openDrawer}
         width={200}
       >
-        <button className="bg-[#fe5f5c] w-full my-2 flex flex-row items-center justify-center gap-1 text-white rounded-md py-2 hover:bg-[#f8a09f]">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-[#fe5f5c] w-full my-2 flex flex-row items-center justify-center gap-1 text-white rounded-md py-2 hover:bg-[#f8a09f]"
+        >
           <FaPlus className="text-xs" />
           <p>Create</p>
         </button>

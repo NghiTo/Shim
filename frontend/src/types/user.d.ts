@@ -1,4 +1,4 @@
-import { School } from "./school.type";
+import { School } from "./school";
 
 export type UserState = {
   id: string;

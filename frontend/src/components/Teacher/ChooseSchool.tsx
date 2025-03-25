@@ -8,7 +8,7 @@ import { RootState } from "../../store/store";
 import { updateUser } from "../../apis/user.api";
 import { getSchools } from "../../apis/school.api";
 import { setUser } from "../../store/userReducer";
-import { School } from "../../types/school.type";
+import { School } from "../../types/school";
 import {
   useInfiniteQuery,
   useMutation,

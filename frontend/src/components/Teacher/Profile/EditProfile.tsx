@@ -9,7 +9,7 @@ import {
   titleOptions,
 } from "../../../constants/constants";
 import { onError } from "../../../constants/onError";
-import { Profile } from "../../../types/user.type";
+import { Profile } from "../../../types/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   firstNameSchema,

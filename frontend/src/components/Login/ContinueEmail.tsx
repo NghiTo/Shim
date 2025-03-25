@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FaArrowLeft, FaRegEnvelope } from "react-icons/fa6";
 import { GoLock } from "react-icons/go";
 import { emailSchema, passwordSchema } from "../../schemas/userSchema";
-import { LoginForm } from "../../types/user.type";
+import { LoginForm } from "../../types/user";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../apis/auth.api";
 import { useNavigate } from "react-router-dom";

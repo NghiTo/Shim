@@ -11,6 +11,7 @@ export const titleSchema: Rule[] = [
 
 export const gradeSchema: Rule[] = [
   { required: true, message: "Grade is required" },
+  { max: 5, message: "Invalid grade length" },
 ];
 
 export const subjectSchema: Rule[] = [

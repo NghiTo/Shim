@@ -1,5 +1,9 @@
+import { useMutation } from "@tanstack/react-query";
 import { Modal } from "antd";
 import React from "react";
+import { createQuiz } from "../../apis/quiz.api";
+import { useNavigate } from "react-router-dom";
+import { onError } from "../../constants/onError";
 
 interface CreateModalProps {
   isModalOpen: boolean;
@@ -9,6 +13,16 @@ const CreateModal: React.FC<CreateModalProps> = ({
   isModalOpen,
   closeModal,
 }) => {
+  const navigate = useNavigate();
+  const { mutate } = useMutation({
+    mutationFn: createQuiz,
+    onSuccess: (res) => {
+      closeModal();
+      navigate(`/teacher/create-quiz/${res.data.id}`);
+    },
+    onError: onError,
+  });
+
   return (
     <Modal
       title={
@@ -23,7 +37,10 @@ const CreateModal: React.FC<CreateModalProps> = ({
       width={1200}
     >
       <div className="mt-8 grid grid-cols-3 max-md:grid-cols-1 gap-2 max-md:text-base">
-        <div className="flex flex-col gap-14 border border-gray-400 rounded-md p-6 cursor-pointer hover:bg-gray-100 hover:shadow-lg">
+        <div
+          onClick={() => mutate()}
+          className="flex flex-col gap-14 border border-gray-400 rounded-md p-6 cursor-pointer hover:bg-gray-100 hover:shadow-lg"
+        >
           <div className="flex flex-row items-center gap-2">
             <img
               src="/src/assets/quiz_solid_circle.png"

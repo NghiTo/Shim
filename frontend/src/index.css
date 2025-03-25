@@ -1,5 +1,9 @@
 @import "tailwindcss" important;
 
+*::-webkit-scrollbar {
+  display: none !important;
+}
+
 .ant-menu-item-selected {
   color: #fe5f5c !important;
   background: none !important;

@@ -11,7 +11,7 @@ import { RootState } from "../../../store/store";
 import { useMutation } from "@tanstack/react-query";
 import { updateUser } from "../../../apis/user.api";
 import { useState } from "react";
-import { PasswordForm } from "../../../types/user.type";
+import { PasswordForm } from "../../../types/user";
 import { onError } from "../../../constants/onError";
 import { sendOtp } from "../../../apis/auth.api";
 import { useNavigate } from "react-router-dom";
