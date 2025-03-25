@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import { PrismaClient } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import pkg from "lodash";
 import nodemailer from "nodemailer";
@@ -12,12 +11,12 @@ import MESSAGES from "../constants/messages.js";
 import ERROR_CODES from "../constants/errorCode.js";
 import userService from "./userService.js";
 import { generateAccessToken } from "../utils/generateTokens.js";
+import prisma from "../utils/PrismaClient.js";
 
 dotenv.config({ path: path.resolve("environments/.env") });
 
 const SALT_ROUNDS = 10;
 const { omit } = pkg;
-const prisma = new PrismaClient();
 
 const register = async (data) => {
   const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS);

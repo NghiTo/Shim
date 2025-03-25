@@ -1,6 +1,5 @@
 import omit from "lodash/omit.js";
 import { StatusCodes } from "http-status-codes";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
@@ -8,8 +7,7 @@ import ERROR_CODES from "../constants/errorCode.js";
 import MESSAGES from "../constants/messages.js";
 import { AppError } from "../utils/errorHandler.js";
 import s3 from "../config/awsConfig.js";
-
-const prisma = new PrismaClient();
+import prisma from "../utils/PrismaClient.js";
 
 const findUserByEmail = async (email) => {
   const user = await prisma.user.findFirst({ where: { email } });

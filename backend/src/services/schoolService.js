@@ -1,10 +1,8 @@
 import { StatusCodes } from "http-status-codes";
-import { PrismaClient } from "@prisma/client";
 import MESSAGES from "../constants/messages.js";
 import ERROR_CODES from "../constants/errorCode.js";
 import { AppError } from "../utils/errorHandler.js";
-
-const prisma = new PrismaClient();
+import prisma from "../utils/PrismaClient.js";
 
 const getSchools = async (page = 1, pageSize = 6) => {
   const schools = await prisma.school.findMany({

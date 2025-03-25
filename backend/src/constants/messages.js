@@ -27,6 +27,9 @@ const MESSAGES = {
     FIND_SUCCESS: "School found successfully.",
     NOT_FOUND: "School not found",
   },
+  QUIZ: {
+    CREATE_SUCCESS: "Quiz created successfully",
+  },
 };
 
 export default MESSAGES;
