@@ -5,7 +5,7 @@ import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
 import ERROR_CODES from "../constants/errorCode.js";
 import MESSAGES from "../constants/messages.js";
-import { AppError } from "../utils/errorHandler.js";
+import { AppError } from "../utils/AppError.js";
 import s3 from "../config/awsConfig.js";
 import prisma from "../utils/PrismaClient.js";
 

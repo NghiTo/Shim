@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
 
-import { AppError } from "../utils/errorHandler.js";
+import { AppError } from "../utils/AppError.js";
 import MESSAGES from "../constants/messages.js";
 import ERROR_CODES from "../constants/errorCode.js";
 import userService from "./userService.js";

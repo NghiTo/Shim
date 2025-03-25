@@ -1,17 +1,6 @@
 import { isCelebrateError } from "celebrate";
 
-class AppError extends Error {
-  constructor({ message, statusCode, errorCode, details }) {
-    super(message);
-    this.statusCode = statusCode;
-    this.errorCode = errorCode;
-    this.details = details;
-    this.isOperational = true;
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
-
-const globalErrorHandler = (err, req, res, next) => {
+ export const globalErrorHandler = (err, req, res, next) => {
   if (isCelebrateError(err)) {
     const errorDetails = [];
     err.details.forEach((value, key) => {
@@ -41,5 +30,3 @@ const globalErrorHandler = (err, req, res, next) => {
     details: err.details || null,
   });
 };
-
-export { AppError, globalErrorHandler };

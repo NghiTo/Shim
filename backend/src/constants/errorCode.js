@@ -21,6 +21,9 @@ const ERROR_CODES = {
   SCHOOL: {
     NOT_FOUND: "SCHOOL_NOT_FOUND",
   },
+  QUIZ: {
+    NOT_FOUND: "QUIZ_NOT_FOUND",
+  }
 };
 
 export default ERROR_CODES;

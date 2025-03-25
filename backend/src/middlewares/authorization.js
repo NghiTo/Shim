@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../utils/catchAsync.js";
-import { AppError } from "../utils/errorHandler.js";
+import { AppError } from "../utils/AppError.js";
 import MESSAGES from "../constants/messages.js";
 import ERROR_CODES from "../constants/errorCode.js";
 /**

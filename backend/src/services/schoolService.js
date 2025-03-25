@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import MESSAGES from "../constants/messages.js";
 import ERROR_CODES from "../constants/errorCode.js";
-import { AppError } from "../utils/errorHandler.js";
+import { AppError } from "../utils/AppError.js";
 import prisma from "../utils/PrismaClient.js";
 
 const getSchools = async (page = 1, pageSize = 6) => {

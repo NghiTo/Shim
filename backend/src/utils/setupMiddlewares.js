@@ -6,10 +6,10 @@ import passport from "passport";
 import session from "express-session";
 
 import routes from "../routes/mainRoute.js";
-import { AppError, globalErrorHandler } from "./errorHandler.js";
+import { AppError } from "./AppError.js";
 import ERROR_CODES from "../constants/errorCode.js";
 import { googleOauth } from "../config/googleConfig.js";
-import { generateAccessToken, generateRefreshToken } from "./generateTokens.js";
+import { globalErrorHandler } from "../middlewares/errorHandler.js";
 
 export default function setupMiddlewares(app) {
   app.use(cors({ origin: process.env.FRONT_END_URL, credentials: true }));

@@ -11,4 +11,11 @@ const createQuiz = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.QUIZ.CREATE_SUCCESS, data: quiz });
 });
 
-export default { createQuiz };
+const getQuizById = catchAsync(async (req, res) => {
+  const quiz = await quizService.getQuizById(req.params.id);
+  res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.QUIZ.FIND_SUCCESS, data: quiz });
+});
+
+export default { createQuiz, getQuizById };

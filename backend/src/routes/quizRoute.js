@@ -6,4 +6,6 @@ const router = Router();
 
 router.post("/", authenticate, quizController.createQuiz);
 
-export default router
+router.get("/:id", authenticate, quizController.getQuizById);
+
+export default router;

@@ -1,3 +1,7 @@
+import { StatusCodes } from "http-status-codes";
+import ERROR_CODES from "../constants/errorCode.js";
+import MESSAGES from "../constants/messages.js";
+import { AppError } from "../utils/AppError.js";
 import prisma from "../utils/PrismaClient.js";
 
 const createQuiz = async (userId) => {
@@ -25,4 +29,16 @@ const createQuiz = async (userId) => {
   return quiz;
 };
 
-export default { createQuiz };
+const getQuizById = async (quizId) => {
+  const quiz = await prisma.quiz.findUnique({ where: { id: quizId } });
+  if (!quiz) {
+    throw new AppError({
+      message: MESSAGES.QUIZ.NOT_FOUND,
+      errorCode: ERROR_CODES.QUIZ.NOT_FOUND,
+      statusCode: StatusCodes.NOT_FOUND,
+    });
+  }
+  return quiz;
+};
+
+export default { createQuiz, getQuizById };
