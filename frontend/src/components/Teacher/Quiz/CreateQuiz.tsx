@@ -7,13 +7,13 @@ import {
   itemsPoint,
   itemsTime,
   questionTypes,
-} from "../../constants/constants";
-import { convertCamelCaseToTitleCase } from "../../utils/helper";
+} from "../../../constants/constants";
+import { convertCamelCaseToTitleCase } from "../../../utils/helper";
 import { useQuery } from "@tanstack/react-query";
-import { getQuizById } from "../../apis/quiz.api";
+import { getQuizById } from "../../../apis/quiz.api";
 import { useState } from "react";
 import QuizSetting from "./QuizSetting";
-import { Quiz } from "../../types/quiz";
+import { Quiz } from "../../../types/quiz";
 
 const CreateQuiz = () => {
   const navigate = useNavigate();

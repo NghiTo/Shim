@@ -17,7 +17,7 @@ import UserInfo from "./components/Teacher/Profile/UserInfo";
 import GoogleLogin from "./components/shared/GoogleLogin";
 import Setting from "./components/Teacher/Setting/Setting";
 import DeleteAccount from "./pages/DeleteAccount";
-import CreateQuiz from "./components/Quiz/CreateQuiz";
+import CreateQuiz from "./components/Teacher/Quiz/CreateQuiz";
 
 const Home = lazy(() => import("./pages/Home"));
 const Teacher = lazy(() => import("./pages/Teacher"));

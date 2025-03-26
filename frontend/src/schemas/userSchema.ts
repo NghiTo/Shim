@@ -7,6 +7,7 @@ export const emailSchema: Rule[] = [
 
 export const titleSchema: Rule[] = [
   { required: true, message: "Title is required" },
+  { min: 2, message: "Title must be at least 2 characters" },
 ];
 
 export const gradeSchema: Rule[] = [
