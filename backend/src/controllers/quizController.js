@@ -18,4 +18,14 @@ const getQuizById = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.QUIZ.FIND_SUCCESS, data: quiz });
 });
 
-export default { createQuiz, getQuizById };
+const updateQuiz = catchAsync(async (req, res) => {
+  if (req.file) {
+    req.body.coverImg = req.file;
+  }
+  const updatedQuiz = await quizService.updateQuiz(req.params.id, req.body);
+  res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.QUIZ.UPDATE_SUCCESS, data: updatedQuiz });
+});
+
+export default { createQuiz, getQuizById, updateQuiz };

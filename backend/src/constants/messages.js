@@ -31,6 +31,7 @@ const MESSAGES = {
     CREATE_SUCCESS: "Quiz created successfully",
     NOT_FOUND: "Quiz not found",
     FIND_SUCCESS: "Quiz found successfully",
+    UPDATE_SUCCESS: "Update found successfully",
   },
 };
 
