@@ -54,7 +54,8 @@ const typeField = Joi.string()
   .required()
   .messages({
     "string.base": "Type must be a string",
-    "any.only": "Type must be one of: multipleChoice, trueFalse, fillInTheBlank, shortAnswer",
+    "any.only":
+      "Type must be one of: multipleChoice, trueFalse, fillInTheBlank, shortAnswer",
     "any.required": "Type is required",
   });
 
@@ -69,14 +70,17 @@ const answerField = Joi.object({
     "boolean.base": "isCorrect must be a boolean",
     "any.required": "isCorrect is required",
   }),
+  position: Joi.number().optional().messages({
+    "number.base": "Position must be a number",
+    "number.integer": "Position must be an integer",
+  }),
   imageUrl: Joi.string().uri().optional().messages({
     "string.uri": "imageUrl must be a valid URL",
   }),
 });
 
-const answersField = Joi.array().items(answerField).min(2).required().messages({
+const answersField = Joi.array().items(answerField).required().messages({
   "array.base": "Answers must be an array",
-  "array.min": "At least 2 answers are required",
   "any.required": "Answers are required",
 });
 

@@ -11,6 +11,7 @@ const createQuestion = async (data) => {
           create: data.answers.map((answer) => ({
             content: answer.content,
             isCorrect: answer.isCorrect,
+            position: data.type === "fillInTheBlank" ? Number(data.position) : null,
           })),
         },
       },
