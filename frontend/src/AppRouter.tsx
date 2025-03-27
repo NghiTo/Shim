@@ -95,6 +95,7 @@ const router = createBrowserRouter([
         <DeleteAccount />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorFallback />,
   },
   {
     path: "/teacher",

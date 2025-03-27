@@ -1,24 +1,24 @@
-import { Button, Dropdown, Result } from "antd";
+import { Button, Dropdown } from "antd";
 import { FaArrowLeft, FaCheck, FaRegClock } from "react-icons/fa6";
 import { IoIosArrowDown, IoMdSettings } from "react-icons/io";
 import { MdPlayArrow } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  itemsPoint,
-  itemsTime,
-  questionTypes,
-} from "../../../constants/constants";
-import { convertCamelCaseToTitleCase } from "../../../utils/helper";
 import { useQuery } from "@tanstack/react-query";
-import { getQuizById } from "../../../apis/quiz.api";
 import { useState } from "react";
 import QuizSetting from "./QuizSetting";
-import { Quiz } from "../../../types/quiz";
+import QuestionTypeSelector from "./QuestionTypeSelector";
+import { QuestionType, Quiz } from "@/types/quiz";
+import { getQuizById } from "@/apis/quiz.api";
+import ErrorPage from "@/components/shared/ErrorPage";
+import { itemsPoint, itemsTime } from "@/constants/constants";
+import QuestionEditor from "./QuestionEditor";
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
   const { quizId } = useParams();
   const [openSetting, setOpenSetting] = useState(false);
+  const [currentQuestionType, setCurrentQuestionType] =
+    useState<QuestionType | null>(null);
 
   const { data, isError } = useQuery<Quiz>({
     queryKey: ["quiz", quizId],
@@ -26,19 +26,11 @@ const CreateQuiz = () => {
     retry: 0,
   });
 
-  if (isError) {
-    return (
-      <Result
-        status="warning"
-        title="There are some problems with your operation."
-        extra={
-          <Button onClick={() => navigate(-1)} type="primary" key="console">
-            Go back
-          </Button>
-        }
-      />
-    );
-  }
+  const handleQuestionTypeSelect = (type: QuestionType) => {
+    setCurrentQuestionType(type);
+  };
+
+  if (isError) return <ErrorPage />;
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -121,82 +113,20 @@ const CreateQuiz = () => {
               </div>
             </Dropdown>
           </div>
-          <div className="rounded-lg bg-white border border-gray-300 grid grid-cols-2 gap-2 text-sm p-1">
-            {questionTypes.map((type) => (
-              <div
-                key={type.label}
-                // onClick={() => openModal(type.label, null)}
-                className={`flex flex-row items-center h-fit gap-2 hover:bg-gray-200 w-full cursor-pointer p-2 rounded-md`}
-              >
-                <div
-                  className="p-2 rounded-md"
-                  style={{
-                    backgroundColor: type.color,
-                    color: "white",
-                  }}
-                >
-                  {type.icon}
-                </div>
-                <p>{convertCamelCaseToTitleCase(type.label)}</p>
-              </div>
-            ))}
-          </div>
-          {/* {modalType === "multipleChoice" && (
-            <MultipleChoice
-              open={isModalOpen}
-              closeModal={closeModal}
-              question={activeQuestion}
-            />
-          )}
-          {modalType === "fillInTheBlank" && (
-            <FillInTheBlank
-              open={isModalOpen}
-              closeModal={closeModal}
-              question={activeQuestion}
-            />
-          )}
-          {modalType === "openEnded" && (
-            <OpenEnded
-              open={isModalOpen}
-              closeModal={closeModal}
-              question={activeQuestion}
-            />
-          )} */}
+          <QuestionTypeSelector onSelectType={handleQuestionTypeSelect} />
         </div>
-        <div className="w-3/4 max-md:w-full flex flex-col gap-4">
-          <div className="flex flex-row gap-2 items-center">
-            <p className="font-semibold text-xl">
-              {/* {addSuffix(quiz?.data?.questions.length, "question")} */}
+        {currentQuestionType ? (
+          <QuestionEditor type={currentQuestionType} />
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-center flex-1 m-auto">
+            <h3 className="text-xl font-medium mb-4">
+              Start creating your quiz
+            </h3>
+            <p className="text-gray-500 mb-6">
+              Select a question type from the left to get started
             </p>
-            {/* <p className="text-xl text-gray-500">{`(${addSuffix(
-              quiz?.data?.questions.reduce(
-                (acc: number, val: QuestionResponse) => acc + val.point,
-                0
-              ),
-              "point"
-            )})`}</p> */}
           </div>
-          <div className="overflow-y-auto h-[450px] flex flex-col gap-4">
-            {/* {quiz?.data.questions.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-6 border border-gray-300 rounded-lg bg-white text-center">
-                <p className="text-xl font-semibold text-gray-500">
-                  You haven't created any questions!
-                </p>
-                <p className="text-gray-400">
-                  Please create new questions to submit quiz.
-                </p>
-              </div>
-            ) : (
-              quiz?.data.questions.map((question: QuestionResponse) => (
-                <Question
-                  key={question.id}
-                  question={question}
-                  onEdit={openModal}
-                />
-              ))
-            )} */}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

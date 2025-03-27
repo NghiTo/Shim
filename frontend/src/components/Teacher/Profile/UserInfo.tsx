@@ -11,17 +11,21 @@ import { Profile } from "../../../types/user";
 import { message, Skeleton, Spin } from "antd";
 import EditProfile from "./EditProfile";
 import { setUser } from "../../../store/userReducer";
+import { useParams } from "react-router-dom";
+import ErrorPage from "../../shared/ErrorPage";
 
 const UserInfo = () => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
+  const { id } = useParams();
   const inputFileRef = useRef<HTMLInputElement | null>(null);
   const user = useSelector((state: RootState) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isLoading } = useQuery<Profile>({
-    queryKey: ["profile", user.id],
-    queryFn: () => getUserById(user.id),
+  const { data, isLoading, isError } = useQuery<Profile>({
+    queryKey: ["profile", id],
+    queryFn: () => getUserById(id as string),
+    retry: 0,
   });
 
   const handleImageClick = () => {
@@ -48,6 +52,8 @@ const UserInfo = () => {
     formData.append("avatarUrl", file);
     mutate(formData);
   };
+
+  if (isError) return <ErrorPage />;
 
   return (
     <div className="bg-gray-100 p-8 max-md:py-8 max-md:px-0 max-md:min-h-screen h-full w-full">
