@@ -33,6 +33,9 @@ const MESSAGES = {
     FIND_SUCCESS: "Quiz found successfully",
     UPDATE_SUCCESS: "Update found successfully",
   },
+  QUESTION: {
+    CREATE_SUCCESS: "Question created successfully",
+  },
 };
 
 export default MESSAGES;
