@@ -1,4 +1,4 @@
-import { Button, Dropdown } from "antd";
+import { Button, Dropdown, Skeleton } from "antd";
 import { FaArrowLeft, FaCheck, FaRegClock } from "react-icons/fa6";
 import { IoIosArrowDown, IoMdSettings } from "react-icons/io";
 import { MdPlayArrow } from "react-icons/md";
@@ -20,7 +20,7 @@ const CreateQuiz = () => {
   const [currentQuestionType, setCurrentQuestionType] =
     useState<QuestionType | null>(null);
 
-  const { data, isError } = useQuery<Quiz>({
+  const { data, isError, isLoading } = useQuery<Quiz>({
     queryKey: ["quiz", quizId],
     queryFn: () => getQuizById(quizId as string),
     retry: 0,
@@ -43,7 +43,11 @@ const CreateQuiz = () => {
           >
             <FaArrowLeft />
           </div>
-          <p className="font-medium max-md:hidden">{data?.title}</p>
+          {isLoading ? (
+            <Skeleton.Button active className="w-28"/>
+          ) : (
+            <p className="font-medium max-md:hidden">{data?.title}</p>
+          )}
         </div>
         <div className="ml-auto flex flex-row gap-4">
           <div

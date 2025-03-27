@@ -34,6 +34,7 @@ export type QuestionType =
 export type Answer = {
   content: string;
   isCorrect: boolean;
+  position?: number;
 };
 
 export type QuestionForm = {

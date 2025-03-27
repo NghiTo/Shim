@@ -63,7 +63,6 @@ const MultipleChoiceEditor = () => {
     <Form
       form={form}
       onFinish={handleFormSubmit}
-      id="create-question"
       layout="vertical"
       initialValues={{
         answers: [
@@ -151,7 +150,6 @@ const MultipleChoiceEditor = () => {
                 </Button>
               )}
               <Button
-                form="create-question"
                 type="primary"
                 htmlType="submit"
                 className="ml-auto"
