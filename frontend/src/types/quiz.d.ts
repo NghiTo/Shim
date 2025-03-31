@@ -33,7 +33,7 @@ export type QuestionType =
 
 export type Answer = {
   content: string;
-  isCorrect: boolean;
+  isCorrect: boolean | null;
   position?: number;
 };
 

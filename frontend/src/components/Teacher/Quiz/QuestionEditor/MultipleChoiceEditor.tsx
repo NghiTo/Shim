@@ -87,7 +87,11 @@ const MultipleChoiceEditor = () => {
           <InputNumber placeholder="Enter point" className="w-fit" />
         </Form.Item>
       </div>
-      <Form.Item label="Question Title" name="title" rules={titleSchema}>
+      <Form.Item<{ title: string }>
+        label="Question Title"
+        name="title"
+        rules={titleSchema}
+      >
         <Input.TextArea rows={3} placeholder="Enter your question here" />
       </Form.Item>
       <div className="flex flex-row items-center gap-3 mb-3">
@@ -96,7 +100,7 @@ const MultipleChoiceEditor = () => {
           onChange={() => setAllowMultiple(!allowMultiple)}
         />
         <label className="font-semibold text-base">
-          Allow multiple isCorrect answers
+          Allow multiple correct answers
         </label>
       </div>
       <Form.List name="answers">

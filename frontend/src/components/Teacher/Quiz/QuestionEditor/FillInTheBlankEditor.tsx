@@ -77,7 +77,11 @@ const FillInTheBlankEditor = () => {
         <h3>Preview Question:</h3>
         <p>{form.getFieldValue("title")?.replace(/\[blank\]/g, "_____")}</p>
       </div>
-      <Form.Item label="Question" name="title" rules={titleSchema}>
+      <Form.Item<{ title: string }>
+        label="Question"
+        name="title"
+        rules={titleSchema}
+      >
         <Input.TextArea
           rows={3}
           placeholder="Enter your question with [blank]"

@@ -3,6 +3,7 @@ import { convertCamelCaseToTitleCase } from "@/utils/helper";
 import React from "react";
 import MultipleChoiceEditor from "./QuestionEditor/MultipleChoiceEditor";
 import FillInTheBlankEditor from "./QuestionEditor/FillInTheBlankEditor";
+import OpenEndedEditor from "./QuestionEditor/OpenEndedEditor";
 
 interface QuestionEditorProps {
   type: QuestionType;
@@ -15,6 +16,8 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({ type }) => {
         return <MultipleChoiceEditor />;
       case "fillInTheBlank":
         return <FillInTheBlankEditor />;
+      case "openEnded":
+        return <OpenEndedEditor />;
     }
   };
   return (
