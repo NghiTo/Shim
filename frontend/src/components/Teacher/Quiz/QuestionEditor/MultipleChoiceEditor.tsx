@@ -1,7 +1,7 @@
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { pointSchema, timeSchema } from "@/schemas/quizSchema";
 import { Answer, Question, QuestionForm } from "@/types/quiz";
-import { createQuestion } from "@/apis/question.api";
+import { createQuestion, updateQuestion } from "@/apis/question.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { titleSchema } from "@/schemas/userSchema";
@@ -39,6 +39,17 @@ const MultipleChoiceEditor: React.FC<MultipleChoiceEditorProps> = ({
     onError: onError,
   });
 
+  const { mutate: mutateUpdate, isPending: isPendingUpdate } = useMutation({
+    mutationFn: (data: QuestionForm) =>
+      updateQuestion(question?.id as string, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["quiz", quizId] });
+      message.success("Question updated successfully");
+      form.resetFields();
+    },
+    onError: onError,
+  });
+
   const handleFormSubmit = (data: QuestionForm) => {
     const hasCorrect = data.answers.some((a) => a.isCorrect);
     if (!hasCorrect) {
@@ -54,8 +65,11 @@ const MultipleChoiceEditor: React.FC<MultipleChoiceEditorProps> = ({
         isCorrect: answer.isCorrect,
       })),
     };
-
-    mutate(formattedData);
+    if (question) {
+      mutateUpdate(formattedData);
+    } else {
+      mutate(formattedData);
+    }
   };
 
   const handleCheckboxChange = (
@@ -182,7 +196,7 @@ const MultipleChoiceEditor: React.FC<MultipleChoiceEditorProps> = ({
                 type="primary"
                 htmlType="submit"
                 className="ml-auto"
-                loading={isPending}
+                loading={isPending || isPendingUpdate}
               >
                 {`${question ? "Update" : "Create"} question`}
               </Button>

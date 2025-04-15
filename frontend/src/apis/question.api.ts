@@ -6,7 +6,12 @@ export const createQuestion = async (data: QuestionForm) => {
   return res.data;
 };
 
+export const updateQuestion = async (questionId: string, data: QuestionForm) => {
+  const res = await axiosInstance.put(`/questions/${questionId}`, data);
+  return res.data;
+};
+
 export const deleteQuestion = async (questionId: string) => {
   const res = await axiosInstance.delete(`/questions/${questionId}`);
   return res.data;
-}
+};
