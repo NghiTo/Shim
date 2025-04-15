@@ -1,20 +1,38 @@
-import { createQuestion } from "@/apis/question.api";
-import { onError } from "@/constants/onError";
-import { pointSchema, timeSchema } from "@/schemas/quizSchema";
-import { titleSchema } from "@/schemas/userSchema";
-import { QuestionForm } from "@/types/quiz";
-import { useMutation } from "@tanstack/react-query";
+import { createQuestion, updateQuestion } from "@/apis/question.api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Input, InputNumber, message } from "antd";
+import { pointSchema, timeSchema } from "@/schemas/quizSchema";
+import { Question, QuestionForm } from "@/types/quiz";
+import { titleSchema } from "@/schemas/userSchema";
+import { onError } from "@/constants/onError";
 import { useParams } from "react-router-dom";
+import React, { useEffect } from "react";
 
-const OpenEndedEditor = () => {
+interface OpenEndedEditorProps {
+  question: Question | null;
+}
+
+const OpenEndedEditor: React.FC<OpenEndedEditorProps> = ({ question }) => {
   const [form] = Form.useForm();
   const { quizId } = useParams();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: createQuestion,
     onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ["quiz", quizId]})
       message.success("Question created successfully");
+      form.resetFields();
+    },
+    onError: onError,
+  });
+
+  const { mutate: mutateUpdate, isPending: isPendingUpdate } = useMutation({
+    mutationFn: (data: QuestionForm) =>
+      updateQuestion(question?.id as string, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["quiz", quizId] });
+      message.success("Question updated successfully");
       form.resetFields();
     },
     onError: onError,
@@ -27,8 +45,22 @@ const OpenEndedEditor = () => {
       quizId: quizId,
       answers: data.answers,
     };
-    mutate(formattedData);
+    if (question) {
+      mutateUpdate(formattedData);
+    } else {
+      mutate(formattedData);
+    }
   };
+
+  useEffect(() => {
+    form.setFieldsValue({
+      title: question?.title,
+      time: question?.time,
+      point: question?.point,
+      answers: question?.answers,
+    });
+  }, [question, form]);
+
   return (
     <Form form={form} layout="vertical" onFinish={onFinish}>
       <div className="flex flex-row items-center gap-6">
@@ -63,7 +95,7 @@ const OpenEndedEditor = () => {
       </Form.Item>
 
       <Button
-        loading={isPending}
+        loading={isPending || isPendingUpdate}
         type="primary"
         htmlType="submit"
         className="ml-auto flex"

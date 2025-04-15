@@ -10,17 +10,41 @@ interface QuestionEditorProps {
   editingQuestion: Question | null;
 }
 
-const QuestionEditor: React.FC<QuestionEditorProps> = ({ type, editingQuestion }) => {
+const QuestionEditor: React.FC<QuestionEditorProps> = ({
+  type,
+  editingQuestion,
+}) => {
   const renderEditorByType = () => {
     switch (type) {
       case "multipleChoice":
         return <MultipleChoiceEditor question={editingQuestion} />;
       case "fillInTheBlank":
-        return <FillInTheBlankEditor question={editingQuestion}/>;
+        return <FillInTheBlankEditor question={editingQuestion} />;
       case "openEnded":
-        return <OpenEndedEditor question={editingQuestion}/>;
+        return <OpenEndedEditor question={editingQuestion} />;
       default:
-        return "Unavailable";
+        return (
+          <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-20 w-20 mb-4 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <h3 className="text-lg font-semibold">Unsupported Question Type</h3>
+            <p className="text-sm">
+              This type of question is not available for editing.
+            </p>
+          </div>
+        );
     }
   };
   return (
