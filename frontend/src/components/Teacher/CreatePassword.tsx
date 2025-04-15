@@ -1,4 +1,4 @@
-import { Form, Input, message, Modal } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
 import {
   confirmPasswordSchema,
@@ -45,12 +45,22 @@ const CreatePassword = () => {
       open={isModalOpen}
       closable={false}
       centered
-      onOk={() => form.submit()}
-      okButtonProps={{ danger: true, disabled: !isFormValid }}
+      footer={
+        <Button
+          form="create-password"
+          type="primary"
+          htmlType="submit"
+          danger
+          disabled={!isFormValid}
+          loading={isPending}
+        >
+          Save
+        </Button>
+      }
       cancelButtonProps={{ style: { display: "none" } }}
-      confirmLoading={isPending}
     >
       <Form
+        id="create-password"
         form={form}
         layout="vertical"
         onFinish={(data) => onSubmit(data.password)}
