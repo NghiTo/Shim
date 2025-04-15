@@ -1,23 +1,24 @@
-import { createBrowserRouter } from "react-router-dom";
-import { lazy, Suspense } from "react";
-
-import Loading from "./components/shared/Loading";
-import ErrorFallback from "./components/shared/ErrorFallBack";
-import NotFound from "./components/shared/NotFound";
-import Register from "./pages/Register";
-import MainSignUp from "./components/Register/MainSignUp";
-import Occupation from "./components/Register/Occupation";
 import TeacherRegister from "./components/Register/TeacherRegister";
 import ProtectedRoute from "./components/shared/ProtectedRoute";
+import ErrorFallback from "./components/shared/ErrorFallBack";
 import RejectedRoute from "./components/shared/RejectedRoute";
-import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import UserInfo from "./components/Teacher/Profile/UserInfo";
-import GoogleLogin from "./components/shared/GoogleLogin";
-import Setting from "./components/Teacher/Setting/Setting";
-import DeleteAccount from "./pages/DeleteAccount";
 import CreateQuiz from "./components/Teacher/Quiz/CreateQuiz";
+import UserInfo from "./components/Teacher/Profile/UserInfo";
+import Setting from "./components/Teacher/Setting/Setting";
+import Library from "./components/Teacher/Library/Library";
+import MainSignUp from "./components/Register/MainSignUp";
+import Occupation from "./components/Register/Occupation";
+import GoogleLogin from "./components/shared/GoogleLogin";
+import { createBrowserRouter } from "react-router-dom";
+import NotFound from "./components/shared/NotFound";
+import ForgotPassword from "./pages/ForgotPassword";
+import Loading from "./components/shared/Loading";
+import ResetPassword from "./pages/ResetPassword";
+import DeleteAccount from "./pages/DeleteAccount";
+import Register from "./pages/Register";
+import { lazy, Suspense } from "react";
+import Login from "./pages/Login";
+
 
 const Home = lazy(() => import("./pages/Home"));
 const Teacher = lazy(() => import("./pages/Teacher"));
@@ -117,6 +118,10 @@ const router = createBrowserRouter([
       {
         path: "/teacher/settings",
         element: <Setting />,
+      },
+      {
+        path: "/teacher/library",
+        element: <Library />,
       },
     ],
   },

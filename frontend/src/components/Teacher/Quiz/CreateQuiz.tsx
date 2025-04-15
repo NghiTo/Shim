@@ -77,7 +77,7 @@ const CreateQuiz = () => {
     mutateAll({ [type]: parseInt(e.key) });
   };
 
-  if (isError) return <ErrorPage />;
+  if (isError || data?.status === "finished") return <ErrorPage />;
 
   return (
     <div className="bg-gray-100 min-h-screen">

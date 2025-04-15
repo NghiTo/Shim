@@ -65,3 +65,7 @@ type Question = {
   createdAt: string;
   answers: Answer[];
 };
+
+export type QuizFilter = {
+  status?: string;
+};
