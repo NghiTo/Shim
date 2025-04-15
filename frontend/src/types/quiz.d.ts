@@ -38,10 +38,10 @@ export type Answer = {
 };
 
 export type QuestionForm = {
-  time: number;
-  point: number;
-  title: string;
-  answers: Answer[];
+  time?: number;
+  point?: number;
+  title?: string;
+  answers?: Answer[];
 };
 
 type Answer = {

@@ -92,6 +92,7 @@ const QuizDrawer: React.FC<QuizDrawerProps> = ({
 
   return (
     <Drawer
+      title="Your questions"
       onClose={() => setOpenDrawer(false)}
       open={openDrawer}
       placement="right"

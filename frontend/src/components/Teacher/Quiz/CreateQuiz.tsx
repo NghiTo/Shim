@@ -1,14 +1,16 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Question, QuestionForm, QuestionType, Quiz } from "@/types/quiz";
 import { FaArrowLeft, FaCheck, FaRegClock } from "react-icons/fa6";
 import { itemsPoint, itemsTime } from "@/constants/constants";
 import { IoIosArrowDown, IoMdSettings } from "react-icons/io";
-import { Question, QuestionType, Quiz } from "@/types/quiz";
+import { Button, Dropdown, message, Skeleton } from "antd";
+import { getQuizById, updateQuiz } from "@/apis/quiz.api";
 import QuestionTypeSelector from "./QuestionTypeSelector";
 import { useNavigate, useParams } from "react-router-dom";
+import { updateAllQuestions } from "@/apis/question.api";
 import ErrorPage from "@/components/shared/ErrorPage";
-import { Button, Dropdown, Skeleton } from "antd";
-import { useQuery } from "@tanstack/react-query";
+import { onError } from "@/constants/onError";
 import QuestionEditor from "./QuestionEditor";
-import { getQuizById } from "@/apis/quiz.api";
 import { MdPlayArrow } from "react-icons/md";
 import QuizSetting from "./QuizSetting";
 import QuizDrawer from "./QuizDrawer";
@@ -16,6 +18,7 @@ import { useState } from "react";
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { quizId } = useParams();
   const [openSetting, setOpenSetting] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -29,6 +32,25 @@ const CreateQuiz = () => {
     retry: 0,
   });
 
+  const { mutate: mutateAll } = useMutation({
+    mutationFn: (data: QuestionForm) =>
+      updateAllQuestions(quizId as string, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["quiz", quizId] });
+      message.success("All questions updated successfully");
+    },
+    onError: onError,
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: FormData) => updateQuiz(quizId as string, data),
+    onError: onError,
+    onSuccess: () => {
+      navigate("/teacher");
+      message.success("Quiz published");
+    },
+  });
+
   const handleQuestionTypeSelect = (type: QuestionType) => {
     setCurrentQuestionType(type);
   };
@@ -37,7 +59,22 @@ const CreateQuiz = () => {
     if (!data?.grade || !data?.subject) {
       setOpenSetting(true);
       return;
+    } else if (data.questions.length === 0) {
+      message.info("Need at least 1 question to publish!");
+      return;
+    } else {
+      const formData = new FormData();
+      formData.append("status", "finished");
+      mutate(formData);
     }
+  };
+
+  const handleDropdownClick = (type: "time" | "point", e: { key: string }) => {
+    if (data?.questions.length === 0) {
+      message.info("Please create a new question");
+      return;
+    }
+    mutateAll({ [type]: parseInt(e.key) });
   };
 
   if (isError) return <ErrorPage />;
@@ -86,7 +123,7 @@ const CreateQuiz = () => {
             setCurrentQuestionType={setCurrentQuestionType}
             setEditingQuestion={setEditingQuestion}
           />
-          <Button onClick={onPublish} danger type="primary">
+          <Button loading={isPending} onClick={onPublish} danger type="primary">
             Publish quiz
           </Button>
         </div>
@@ -98,7 +135,7 @@ const CreateQuiz = () => {
             <Dropdown
               menu={{
                 items: itemsTime,
-                // onClick: (e) => handleDropdownClick("time", e),
+                onClick: (e) => handleDropdownClick("time", e),
               }}
               trigger={["click"]}
               dropdownRender={(menu) => (
@@ -116,7 +153,7 @@ const CreateQuiz = () => {
             <Dropdown
               menu={{
                 items: itemsPoint,
-                // onClick: (e) => handleDropdownClick("point", e),
+                onClick: (e) => handleDropdownClick("point", e),
               }}
               trigger={["click"]}
               dropdownRender={(menu) => (
@@ -137,10 +174,16 @@ const CreateQuiz = () => {
               </div>
             </Dropdown>
           </div>
-          <QuestionTypeSelector onSelectType={handleQuestionTypeSelect} setEditingQuestion={setEditingQuestion}/>
+          <QuestionTypeSelector
+            onSelectType={handleQuestionTypeSelect}
+            setEditingQuestion={setEditingQuestion}
+          />
         </div>
         {currentQuestionType ? (
-          <QuestionEditor type={currentQuestionType} editingQuestion={editingQuestion}/>
+          <QuestionEditor
+            type={currentQuestionType}
+            editingQuestion={editingQuestion}
+          />
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center flex-1 m-auto">
             <h3 className="text-xl font-medium mb-4">
