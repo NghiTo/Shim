@@ -35,6 +35,9 @@ const MESSAGES = {
   },
   QUESTION: {
     CREATE_SUCCESS: "Question created successfully",
+    NOT_FOUND: "Question not found",
+    DELETE_SUCCESS: "Question deleted successfully",
+    UPDATE_SUCCESS: "Question updated successfully",
   },
 };
 

@@ -23,6 +23,9 @@ const ERROR_CODES = {
   },
   QUIZ: {
     NOT_FOUND: "QUIZ_NOT_FOUND",
+  },
+  QUESTION: {
+    NOT_FOUND: "QUESTION_NOT_FOUND",
   }
 };
 

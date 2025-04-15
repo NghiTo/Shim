@@ -32,7 +32,10 @@ const createQuiz = async (userId) => {
 };
 
 const getQuizById = async (quizId) => {
-  const quiz = await prisma.quiz.findUnique({ where: { id: quizId } });
+  const quiz = await prisma.quiz.findUnique({
+    where: { id: quizId },
+    include: { questions: { include: { answers: true } } },
+  });
   if (!quiz) {
     throw new AppError({
       message: MESSAGES.QUIZ.NOT_FOUND,
@@ -45,21 +48,21 @@ const getQuizById = async (quizId) => {
 
 const updateQuiz = async (quizId, data) => {
   await getQuizById(quizId);
-  
+
   if (data.coverImg) {
-      const fileKey = `quizzes/${quizId}-${data.coverImg.originalname}`;
-      const uploadParams = {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: fileKey,
-        Body: data.coverImg.buffer,
-        ContentType: data.coverImg.mimetype,
-      };
-      await s3.send(new PutObjectCommand(uploadParams));
-      data = {
-        ...data,
-        coverImg: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`,
-      };
-    }
+    const fileKey = `quizzes/${quizId}-${data.coverImg.originalname}`;
+    const uploadParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: fileKey,
+      Body: data.coverImg.buffer,
+      ContentType: data.coverImg.mimetype,
+    };
+    await s3.send(new PutObjectCommand(uploadParams));
+    data = {
+      ...data,
+      coverImg: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`,
+    };
+  }
   const quiz = await prisma.quiz.update({
     where: { id: quizId },
     data: { ...data, isPublic: Boolean(data.isPublic) },

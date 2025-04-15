@@ -50,12 +50,12 @@ const pointField = Joi.number().integer().min(1).optional().messages({
 });
 
 const typeField = Joi.string()
-  .valid("multipleChoice", "trueFalse", "fillInTheBlank", "shortAnswer")
+  .valid("multipleChoice", "trueFalse", "fillInTheBlank", "openEnded")
   .required()
   .messages({
     "string.base": "Type must be a string",
     "any.only":
-      "Type must be one of: multipleChoice, trueFalse, fillInTheBlank, shortAnswer",
+      "Type must be one of: multipleChoice, trueFalse, fillInTheBlank, openEnded",
     "any.required": "Type is required",
   });
 
@@ -66,9 +66,8 @@ const answerField = Joi.object({
     "string.min": "Answer content must have at least 1 character",
     "any.required": "Answer content is required",
   }),
-  isCorrect: Joi.boolean().required().messages({
+  isCorrect: Joi.boolean().optional().messages({
     "boolean.base": "isCorrect must be a boolean",
-    "any.required": "isCorrect is required",
   }),
   position: Joi.number().optional().messages({
     "number.base": "Position must be a number",
@@ -79,12 +78,22 @@ const answerField = Joi.object({
   }),
 });
 
-const answersField = Joi.array().items(answerField).required().messages({
+const answersField = Joi.array().items(answerField).optional().messages({
   "array.base": "Answers must be an array",
-  "any.required": "Answers are required",
 });
 
 export const createQuestionSchema = celebrate({
+  [Segments.BODY]: Joi.object({
+    title: titleField,
+    quizId: quizIdField,
+    time: timeField,
+    point: pointField,
+    type: typeField,
+    answers: answersField,
+  }),
+});
+
+export const updateQuestionSchema = celebrate({
   [Segments.BODY]: Joi.object({
     title: titleField,
     quizId: quizIdField,

@@ -87,7 +87,7 @@ enum QuestionType {
     multipleChoice
     trueFalse
     fillInTheBlank
-    shortAnswer
+    openEnded
 }
 
 model Answer {
@@ -95,7 +95,7 @@ model Answer {
     content    String
     imageUrl   String?
     position   Int?
-    isCorrect  Boolean
+    isCorrect  Boolean?
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
     questionId String
