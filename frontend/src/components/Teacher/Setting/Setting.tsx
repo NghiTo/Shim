@@ -34,6 +34,7 @@ const Setting = () => {
   const { mutate: mutateDelete, isPending: isLoading } = useMutation({
     mutationFn: sendOtp,
     onSuccess: () => {
+      message.info("An OTP has been sent to your email")
       navigate("/delete-account");
     },
     onError: onError,

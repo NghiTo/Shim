@@ -8,7 +8,7 @@ export type Quiz = {
   subject: string;
   title: string;
   user?: UserResponse;
-  questions: QuestionResponse[];
+  questions: Question[];
   updatedAt?: string;
 };
 
@@ -41,5 +41,27 @@ export type QuestionForm = {
   time: number;
   point: number;
   title: string;
+  answers: Answer[];
+};
+
+type Answer = {
+  id: string;
+  content: string;
+  imageUrl: string | null;
+  position: number | null;
+  isCorrect: boolean;
+  createdAt: string;
+  updatedAt: string;
+  questionId: string;
+};
+
+type Question = {
+  id: string;
+  title: string;
+  quizId: string;
+  time: number;
+  point: number;
+  type: QuestionType;
+  createdAt: string;
   answers: Answer[];
 };

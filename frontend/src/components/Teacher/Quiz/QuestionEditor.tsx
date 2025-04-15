@@ -1,4 +1,4 @@
-import { QuestionType } from "@/types/quiz";
+import { Question, QuestionType } from "@/types/quiz";
 import { convertCamelCaseToTitleCase } from "@/utils/helper";
 import React from "react";
 import MultipleChoiceEditor from "./QuestionEditor/MultipleChoiceEditor";
@@ -7,17 +7,20 @@ import OpenEndedEditor from "./QuestionEditor/OpenEndedEditor";
 
 interface QuestionEditorProps {
   type: QuestionType;
+  editingQuestion: Question | null;
 }
 
-const QuestionEditor: React.FC<QuestionEditorProps> = ({ type }) => {
+const QuestionEditor: React.FC<QuestionEditorProps> = ({ type, editingQuestion }) => {
   const renderEditorByType = () => {
     switch (type) {
       case "multipleChoice":
-        return <MultipleChoiceEditor />;
+        return <MultipleChoiceEditor question={editingQuestion} />;
       case "fillInTheBlank":
-        return <FillInTheBlankEditor />;
+        return <FillInTheBlankEditor question={editingQuestion}/>;
       case "openEnded":
-        return <OpenEndedEditor />;
+        return <OpenEndedEditor question={editingQuestion}/>;
+      default:
+        return "Unavailable";
     }
   };
   return (

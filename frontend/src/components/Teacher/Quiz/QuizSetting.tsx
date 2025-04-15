@@ -98,9 +98,7 @@ const QuizSetting: React.FC<QuizSettingProps> = ({
       open={openSetting}
       title="Review quiz settings and you’re good to go"
       onCancel={() => setOpenSetting(false)}
-      onOk={() => {
-        form.submit();
-      }}
+      onOk={() => form.submit()}
       centered
       width={500}
       confirmLoading={isPending}

@@ -1,4 +1,12 @@
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { pointSchema, timeSchema } from "@/schemas/quizSchema";
+import { Answer, Question, QuestionForm } from "@/types/quiz";
+import { createQuestion } from "@/apis/question.api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import { titleSchema } from "@/schemas/userSchema";
+import { onError } from "@/constants/onError";
+import { useParams } from "react-router-dom";
 import {
   Button,
   Checkbox,
@@ -8,23 +16,23 @@ import {
   message,
   Switch,
 } from "antd";
-import { useState } from "react";
-import { pointSchema, timeSchema } from "@/schemas/quizSchema";
-import { Answer, QuestionForm } from "@/types/quiz";
-import { titleSchema } from "@/schemas/userSchema";
-import { useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { createQuestion } from "@/apis/question.api";
-import { onError } from "@/constants/onError";
 
-const MultipleChoiceEditor = () => {
+interface MultipleChoiceEditorProps {
+  question: Question | null;
+}
+
+const MultipleChoiceEditor: React.FC<MultipleChoiceEditorProps> = ({
+  question,
+}) => {
   const [allowMultiple, setAllowMultiple] = useState(false);
+  const queryClient = useQueryClient();
   const { quizId } = useParams();
   const [form] = Form.useForm();
 
   const { mutate, isPending } = useMutation({
     mutationFn: createQuestion,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["quiz", quizId] });
       message.success("Question created successfully");
       form.resetFields();
     },
@@ -32,6 +40,11 @@ const MultipleChoiceEditor = () => {
   });
 
   const handleFormSubmit = (data: QuestionForm) => {
+    const hasCorrect = data.answers.some((a) => a.isCorrect);
+    if (!hasCorrect) {
+      message.error("Please choose at least one correct answer");
+      return;
+    }
     const formattedData = {
       ...data,
       type: "multipleChoice",
@@ -59,6 +72,18 @@ const MultipleChoiceEditor = () => {
     }
   };
 
+  useEffect(() => {
+    form.setFieldsValue({
+      title: question?.title,
+      time: question?.time,
+      point: question?.point,
+      answers: question?.answers || [
+        { content: "", isCorrect: true },
+        { content: "", isCorrect: false },
+      ],
+    });
+  }, [question, form]);
+
   return (
     <Form
       form={form}
@@ -66,7 +91,7 @@ const MultipleChoiceEditor = () => {
       layout="vertical"
       initialValues={{
         answers: [
-          { content: "", isCorrect: false },
+          { content: "", isCorrect: true },
           { content: "", isCorrect: false },
         ],
       }}
@@ -159,7 +184,7 @@ const MultipleChoiceEditor = () => {
                 className="ml-auto"
                 loading={isPending}
               >
-                Save Question
+                {`${question ? "Update" : "Create"} question`}
               </Button>
             </div>
           </div>

@@ -1,24 +1,27 @@
-import { Button, Dropdown, Skeleton } from "antd";
 import { FaArrowLeft, FaCheck, FaRegClock } from "react-icons/fa6";
-import { IoIosArrowDown, IoMdSettings } from "react-icons/io";
-import { MdPlayArrow } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import QuizSetting from "./QuizSetting";
-import QuestionTypeSelector from "./QuestionTypeSelector";
-import { QuestionType, Quiz } from "@/types/quiz";
-import { getQuizById } from "@/apis/quiz.api";
-import ErrorPage from "@/components/shared/ErrorPage";
 import { itemsPoint, itemsTime } from "@/constants/constants";
+import { IoIosArrowDown, IoMdSettings } from "react-icons/io";
+import { Question, QuestionType, Quiz } from "@/types/quiz";
+import QuestionTypeSelector from "./QuestionTypeSelector";
+import { useNavigate, useParams } from "react-router-dom";
+import ErrorPage from "@/components/shared/ErrorPage";
+import { Button, Dropdown, Skeleton } from "antd";
+import { useQuery } from "@tanstack/react-query";
 import QuestionEditor from "./QuestionEditor";
+import { getQuizById } from "@/apis/quiz.api";
+import { MdPlayArrow } from "react-icons/md";
+import QuizSetting from "./QuizSetting";
+import QuizDrawer from "./QuizDrawer";
+import { useState } from "react";
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
   const { quizId } = useParams();
   const [openSetting, setOpenSetting] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [currentQuestionType, setCurrentQuestionType] =
     useState<QuestionType | null>(null);
+  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
 
   const { data, isError, isLoading } = useQuery<Quiz>({
     queryKey: ["quiz", quizId],
@@ -28,6 +31,13 @@ const CreateQuiz = () => {
 
   const handleQuestionTypeSelect = (type: QuestionType) => {
     setCurrentQuestionType(type);
+  };
+
+  const onPublish = () => {
+    if (!data?.grade || !data?.subject) {
+      setOpenSetting(true);
+      return;
+    }
   };
 
   if (isError) return <ErrorPage />;
@@ -44,7 +54,7 @@ const CreateQuiz = () => {
             <FaArrowLeft />
           </div>
           {isLoading ? (
-            <Skeleton.Button active className="w-28"/>
+            <Skeleton.Button active className="w-28" />
           ) : (
             <p className="font-medium max-md:hidden">{data?.title}</p>
           )}
@@ -62,11 +72,21 @@ const CreateQuiz = () => {
             setOpenSetting={setOpenSetting}
             quiz={data}
           />
-          <div className="flex flex-row max-md:hidden items-center gap-2 py-1 px-4 border border-gray-400 rounded-md cursor-pointer hover:bg-gray-100">
+          <div
+            onClick={() => setOpenDrawer(true)}
+            className="flex flex-row max-md:hidden items-center gap-2 py-1 px-4 border border-gray-400 rounded-md cursor-pointer hover:bg-gray-100"
+          >
             <MdPlayArrow />
             <p>Preview</p>
           </div>
-          <Button danger type="primary">
+          <QuizDrawer
+            openDrawer={openDrawer}
+            setOpenDrawer={setOpenDrawer}
+            questions={data?.questions}
+            setCurrentQuestionType={setCurrentQuestionType}
+            setEditingQuestion={setEditingQuestion}
+          />
+          <Button onClick={onPublish} danger type="primary">
             Publish quiz
           </Button>
         </div>
@@ -117,10 +137,10 @@ const CreateQuiz = () => {
               </div>
             </Dropdown>
           </div>
-          <QuestionTypeSelector onSelectType={handleQuestionTypeSelect} />
+          <QuestionTypeSelector onSelectType={handleQuestionTypeSelect} setEditingQuestion={setEditingQuestion}/>
         </div>
         {currentQuestionType ? (
-          <QuestionEditor type={currentQuestionType} />
+          <QuestionEditor type={currentQuestionType} editingQuestion={editingQuestion}/>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center flex-1 m-auto">
             <h3 className="text-xl font-medium mb-4">
