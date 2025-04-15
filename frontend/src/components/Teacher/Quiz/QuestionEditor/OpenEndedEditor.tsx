@@ -54,7 +54,11 @@ const OpenEndedEditor = () => {
       >
         <Input.TextArea rows={3} placeholder="Enter your question" />
       </Form.Item>
-      <Form.Item label="Sample answer" name={["answers", 0, "content"]}>
+      <Form.Item
+        label="Sample answer"
+        name={["answers", 0, "content"]}
+        rules={[{ required: true, message: "Please enter sample answer" }]}
+      >
         <Input.TextArea rows={3} placeholder="Enter your sample answer" />
       </Form.Item>
 
