@@ -20,6 +20,14 @@ const updateQuestion = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.QUESTION.UPDATE_SUCCESS, data: question });
 });
 
+const updateAllQuestions = catchAsync(async (req, res) => {
+  const { quizId, ...data } = req.body;
+  const questions = await questionService.updateAllQuestions(quizId, data);
+  return res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.QUESTION.UPDATE_ALL_SUCCESS, data: questions });
+});
+
 const deleteQuestion = catchAsync(async (req, res) => {
   await questionService.deleteQuestion(req.params.id);
   return res
@@ -27,4 +35,9 @@ const deleteQuestion = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.QUESTION.DELETE_SUCCESS });
 });
 
-export default { createQuestion, deleteQuestion, updateQuestion };
+export default {
+  createQuestion,
+  deleteQuestion,
+  updateQuestion,
+  updateAllQuestions,
+};

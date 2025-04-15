@@ -18,6 +18,13 @@ const getQuizById = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.QUIZ.FIND_SUCCESS, data: quiz });
 });
 
+const getAllQuizzes = catchAsync(async (req, res) => {
+  const quizzes = await quizService.getAllQuizzes(req.query);
+  res
+    .status(StatusCodes.OK)
+    .json({ message: MESSAGES.QUIZ.FIND_ALL_SUCCESS, data: quizzes });
+});
+
 const updateQuiz = catchAsync(async (req, res) => {
   if (req.file) {
     req.body.coverImg = req.file;
@@ -28,4 +35,4 @@ const updateQuiz = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.QUIZ.UPDATE_SUCCESS, data: updatedQuiz });
 });
 
-export default { createQuiz, getQuizById, updateQuiz };
+export default { createQuiz, getQuizById, updateQuiz, getAllQuizzes };

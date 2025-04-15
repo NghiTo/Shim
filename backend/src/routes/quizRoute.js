@@ -9,6 +9,7 @@ const router = Router();
 router.post("/", authenticate, quizController.createQuiz);
 
 router.get("/:id", authenticate, quizController.getQuizById);
+router.get("/", authenticate, quizController.getAllQuizzes);
 
 router.put(
   "/:id",

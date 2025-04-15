@@ -46,6 +46,24 @@ const getQuizById = async (quizId) => {
   return quiz;
 };
 
+const getAllQuizzes = async (queries) => {
+  const quizzes = await prisma.quiz.findMany({
+    where: { ...queries },
+    include: {
+      questions: {
+        include: {
+          answers: true,
+        },
+      },
+      user: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return quizzes;
+};
+
 const updateQuiz = async (quizId, data) => {
   await getQuizById(quizId);
 
@@ -70,4 +88,4 @@ const updateQuiz = async (quizId, data) => {
   return quiz;
 };
 
-export default { createQuiz, getQuizById, updateQuiz };
+export default { createQuiz, getQuizById, updateQuiz, getAllQuizzes };

@@ -103,3 +103,11 @@ export const updateQuestionSchema = celebrate({
     answers: answersField,
   }),
 });
+
+export const updateAllQuestionsSchema = celebrate({
+  [Segments.BODY]: Joi.object({
+    quizId: quizIdField,
+    time: timeField,
+    point: pointField,
+  }),
+});

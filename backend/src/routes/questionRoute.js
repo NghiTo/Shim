@@ -3,6 +3,7 @@ import { authenticate } from "../middlewares/authentication.js";
 import questionController from "../controllers/questionController.js";
 import {
   createQuestionSchema,
+  updateAllQuestionsSchema,
   updateQuestionSchema,
 } from "../validators/quizValidation.js";
 
@@ -20,6 +21,12 @@ router.put(
   authenticate,
   updateQuestionSchema,
   questionController.updateQuestion
+);
+router.put(
+  "/",
+  authenticate,
+  updateAllQuestionsSchema,
+  questionController.updateAllQuestions
 );
 
 router.delete("/:id", authenticate, questionController.deleteQuestion);
