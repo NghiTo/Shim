@@ -111,3 +111,13 @@ export const updateAllQuestionsSchema = celebrate({
     point: pointField,
   }),
 });
+
+export const deleteQuizSchema = celebrate({
+  [Segments.BODY]: Joi.object({
+    quizIds: Joi.array().items(quizIdField).required().messages({
+      "array.base": "quizIds must be an array",
+      "array.empty": "quizIds is required",
+      "any.required": "quizIds is required",
+    }),
+  }),
+});

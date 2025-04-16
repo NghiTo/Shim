@@ -88,4 +88,15 @@ const updateQuiz = async (quizId, data) => {
   return quiz;
 };
 
-export default { createQuiz, getQuizById, updateQuiz, getAllQuizzes };
+const deleteQuiz = async (quizIds) => {
+  await prisma.quiz.deleteMany({ where: { id: { in: quizIds } } });
+  return;
+};
+
+export default {
+  createQuiz,
+  getQuizById,
+  updateQuiz,
+  getAllQuizzes,
+  deleteQuiz,
+};

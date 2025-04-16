@@ -35,4 +35,16 @@ const updateQuiz = catchAsync(async (req, res) => {
     .json({ message: MESSAGES.QUIZ.UPDATE_SUCCESS, data: updatedQuiz });
 });
 
-export default { createQuiz, getQuizById, updateQuiz, getAllQuizzes };
+const deleteQuiz = catchAsync(async (req, res) => {
+  const { quizIds } = req.body;
+  await quizService.deleteQuiz(quizIds);
+  res.status(StatusCodes.OK).json({ message: MESSAGES.QUIZ.DELETE_SUCCESS });
+});
+
+export default {
+  createQuiz,
+  getQuizById,
+  updateQuiz,
+  getAllQuizzes,
+  deleteQuiz,
+};

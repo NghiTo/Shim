@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/authentication.js";
 import quizController from "../controllers/quizController.js";
-import { updateQuizSchema } from "../validators/quizValidation.js";
+import {
+  deleteQuizSchema,
+  updateQuizSchema,
+} from "../validators/quizValidation.js";
 import { upload } from "../middlewares/imageHandler.js";
 
 const router = Router();
@@ -18,5 +21,7 @@ router.put(
   upload.single("coverImg"),
   quizController.updateQuiz
 );
+
+router.delete("/", authenticate, deleteQuizSchema, quizController.deleteQuiz);
 
 export default router;

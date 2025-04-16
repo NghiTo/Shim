@@ -33,6 +33,7 @@ const MESSAGES = {
     FIND_SUCCESS: "Quiz found successfully",
     FIND_ALL_SUCCESS: "All quizzes found successfully",
     UPDATE_SUCCESS: "Update found successfully",
+    DELETE_SUCCESS: "Quiz deleted successfully",
   },
   QUESTION: {
     CREATE_SUCCESS: "Question created successfully",
