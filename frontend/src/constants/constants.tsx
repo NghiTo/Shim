@@ -159,3 +159,43 @@ export const questionTypes = [
   { label: "labeling", icon: <MdLabel />, color: "red" },
   { label: "mathResponse", icon: <BiMath />, color: "red" },
 ];
+
+export const gradeFilters = [
+  { value: "1st", text: "1st" },
+  { value: "2nd", text: "2nd" },
+  { value: "3rd", text: "3rd" },
+  { value: "4th", text: "4th" },
+  { value: "5th", text: "5th" },
+  { value: "6th", text: "6th" },
+  { value: "7th", text: "7th" },
+  { value: "8th", text: "8th" },
+  { value: "9th", text: "9th" },
+  { value: "10th", text: "10th" },
+  { value: "11th", text: "11th" },
+  { value: "12th", text: "12th" },
+];
+
+export const subjectFilters = [
+  { value: "Mathematics", text: "Mathematics" },
+  { value: "English", text: "English" },
+  { value: "Literature", text: "Literature" },
+  { value: "History", text: "History" },
+  { value: "Geography", text: "Geography" },
+  { value: "Physics", text: "Physics" },
+  { value: "Chemistry", text: "Chemistry" },
+  { value: "Biology", text: "Biology" },
+  { value: "Art", text: "Art" },
+  { value: "Music", text: "Music" },
+  {
+    value: "Information technology",
+    text: "Information technology",
+  },
+  { value: "Physical education", text: "Physical education" },
+  { value: "Civic education", text: "Civic education" },
+  { value: "German", text: "German" },
+  { value: "Japanese", text: "Japanese" },
+  { value: "Chinese", text: "Chinese" },
+  { value: "Russian", text: "Russian" },
+  { value: "French", text: "French" },
+  { value: "Korean", text: "Korean" },
+];

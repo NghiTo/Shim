@@ -13,7 +13,7 @@ export const getQuizById = async (id: string) => {
 
 export const getAllQuizzes = async (queries: QuizFilter) => {
   const res = await axiosInstance.get("/quizzes", { params: queries });
-  return res.data.data
+  return res.data.data;
 };
 
 export const updateQuiz = async (id: string, data: FormData) => {
@@ -22,5 +22,10 @@ export const updateQuiz = async (id: string, data: FormData) => {
       "Content-Type": "multipart/form-data",
     },
   });
+  return res.data;
+};
+
+export const deleteQuiz = async (quizIds: string[]) => {
+  const res = await axiosInstance.delete(`/quizzes`, { data: { quizIds } });
   return res.data;
 };

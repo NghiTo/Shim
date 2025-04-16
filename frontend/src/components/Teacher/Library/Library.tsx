@@ -24,7 +24,7 @@ const Library = () => {
     },
   ];
   return (
-    <div className="bg-gray-100 p-8 h-full w-full flex flex-col gap-4">
+    <div className="bg-gray-100 p-8 h-full w-full flex flex-col gap-4 flex-1">
       <div className="flex flex-row items-center">
         <h1 className="text-2xl font-semibold max-md:text-lg">My library</h1>
         <Input
